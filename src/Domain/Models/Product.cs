@@ -12,6 +12,8 @@ namespace TiendaUCN.src.Domain.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
         public ICollection<Image> Images { get; set; } = new List<Image>();
+        public List<CartItem> CartItems { get; } = [];
+        public List<OrderItem> OrderItems { get; } = [];
         public bool IsDeleted { get; set; } = false;
     }
 }

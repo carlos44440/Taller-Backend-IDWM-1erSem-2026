@@ -15,6 +15,8 @@ namespace TiendaUCN.src.Domain.Models
         public required string PasswordHash { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; } = null!;
+        public Cart? Cart { get; set; }  // Referencia opcional a Cart para establecer relacion uno a uno
+        public List<Order> Orders { get; set; } = new List<Order>();
         public bool IsDeleted { get; set; } = false;
     }
 }

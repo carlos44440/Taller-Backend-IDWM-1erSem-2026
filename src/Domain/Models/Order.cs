@@ -9,7 +9,7 @@ namespace TiendaUCN.src.Domain.Models
         public required int TotalPrice { get; set; }
         public int UserId { get; set; }
         public User User { get; set; } = null!;
-        public List<OrderItem> OrderItems { get; set; } = [];
+        public List<OrderItem> OrderItems { get; } = [];
         public bool IsDeleted { get; set; } = false;
     }
 }
