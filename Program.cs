@@ -15,7 +15,6 @@ string connectionStringDB = Environment.GetEnvironmentVariable("DATA_BASE_URL") 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionStringDB));
 #endregion
 
-
 #region Logging Configuration
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
@@ -23,6 +22,14 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 #endregion
 
 var app = builder.Build();
+
+#region Database Migration
+Log.Information("Aplicando migraciones a la base de datos");
+using (var scope = app.Services.CreateScope())
+{
+    await DataSeeder.Initialize(scope.ServiceProvider);
+}
+#endregion
 
 app.MapOpenApi();
 app.Run();

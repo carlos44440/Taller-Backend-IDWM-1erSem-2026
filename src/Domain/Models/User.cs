@@ -7,7 +7,7 @@ namespace TiendaUCN.src.Domain.Models
         public required string Email { get; set; }
         public bool EmailConfirmed { get; set; } = false;
         public string? VerificationCode { get; set; }
-        public DateTime VerificationCodeExpiry { get; set; }
+        public DateTime? VerificationCodeExpiry { get; set; }
         public required string Rut { get; set; }
         public required string PhoneNumber { get; set; }
         public required DateTime BirthDate { get; set; }
