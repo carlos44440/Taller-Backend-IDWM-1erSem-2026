@@ -31,6 +31,12 @@ git clone https://github.com/carlos44440/Taller-Backend-IDWM-1erSem-2026.git
 
 ### 2. Cambiar de rama
 
+Abrir la terminal en VsCode y moverse al directorio del proyecto:
+
+```bash
+cd .\Taller-Backend-IDWM-1erSem-2026\
+```
+
 ```bash
 git checkout develop
 ```
