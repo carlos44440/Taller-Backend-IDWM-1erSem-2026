@@ -25,57 +25,58 @@ Proyecto correspondiente al taller de Backend del ramo de IDWM.
 
 ### 1. Clonar el Repositorio
 
+Abre una terminal en el directorio que desees almacenar este proyecto y ejecuta el siguiente comando:
 ```bash
 git clone https://github.com/carlos44440/Taller-Backend-IDWM-1erSem-2026.git
 ```
 
-### 2. Cambiar de rama
-
-Abrir la terminal en VsCode y moverse al directorio del proyecto:
-
+Navega a la carpeta del proyecto clonado
 ```bash
 cd .\Taller-Backend-IDWM-1erSem-2026\
 ```
 
+Abre VsCode con el siguiente comando:
+```bash
+code .
+```
+
+### 2. Cambiar de rama
+
+Abrir la terminal en VsCode y cambia a la rama develop
 ```bash
 git checkout develop
 ```
 
 ### 3. Establecer las variables de entorno
 
-Crear el archivo **.env**:
-
+Crear el archivo **.env**, desde la terminal en VsCode ejecuta este comando:
 ```bash
 cp .env.example .env
 ```
 
 Configurar las variables de **.env**:
-
 ```bash
-DATA_BASE_URL = Data Source=database.db
+DATA_BASE_URL = Data Source=<nombreBD>.db
 ```
 
 Crear el archivo **appsettings.json**:
-
 ```bash
 cp appsettings.example.json appsettings.json
 ```
 
+
+
 Actualizar las siguientes variables en las seccion **User** de **appsettings.json**:
 
-```bash
-"Name": "Admin",
-"Email": "admin@tiendaucn.cl",
-"Rut": "12345678-9",
-"PhoneNumber": "+569 123456789",
-"BirthDate": "1990-01-01",
-"Gender": "Otro",
-"Password": "Admin1234!"
-"RandomUserPassword": "Random1234!",
-```
+- `Name` con un nombre para el admin
+- `Email` siguiendo este formato example@dominio.cl
+- `Rut` siguiendo este formato XXXXXXXX-X
+- `BirthDate` siguiendo este formato YYYY-MM-DD
+- `PhoneNumber` siguiendo este formato +569 XXXXXXXX
+- `Gender` con cualquiera de estas opciones "Masculino | Femenino | Otro"
+- `Password` y `RandomUserPassword` con una contraseña alfanumérica que contenga al menos una letra mayúscula y al menos un carácter especial.
 
 ### 4. Instalar Entity Framework
-
 ```bash
 dotnet tool install --global dotnet-ef
 ```

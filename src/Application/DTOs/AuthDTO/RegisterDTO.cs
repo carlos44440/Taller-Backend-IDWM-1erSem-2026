@@ -21,7 +21,7 @@ namespace TiendaUCN.src.Application.DTOs.AuthDTO
         public required string Rut { get; set; }
 
         [Required(ErrorMessage = "El número de teléfono es obligatorio.")]
-        [RegularExpression(@"^\d{9}$", ErrorMessage = "El número de teléfono debe tener 9 dígitos.")]
+        [RegularExpression(@"^\+569\s\d{8}$", ErrorMessage = "El número de teléfono debe tener el formato +569 XXXXXXXX.")]
         public required string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "La fecha de nacimiento es obligatoria.")]
