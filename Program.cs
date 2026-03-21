@@ -2,6 +2,7 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Resend;
 using Serilog;
+using TiendaUCN.src.API.Middlewares;
 using TiendaUCN.src.Application.Services.Implements;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Infrastructure.Data;
@@ -13,6 +14,7 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -52,5 +54,7 @@ using (var scope = app.Services.CreateScope())
 }
 #endregion
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapOpenApi();
+app.MapControllers();
 app.Run();
