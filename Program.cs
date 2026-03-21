@@ -1,5 +1,6 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Resend;
 using Serilog;
 using TiendaUCN.src.Infrastructure.Data;
 
@@ -9,13 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
+#region Email Service Configuration
+Log.Information("Configurando servicio de correo electrónico Resend");
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = Environment.GetEnvironmentVariable("RESEND_API_KEY") ?? throw new ArgumentNullException("RESEND_API_KEY is not set");
+});
+builder.Services.AddTransient<IResend, ResendClient>();
+#endregion
+
 #region Database Configuration
 Log.Information("Configurando base de datos SQLite");
-string connectionStringDB = Environment.GetEnvironmentVariable("DATA_BASE_URL") ?? throw new ArgumentNullException("DataBase name cannot be null or empty");
+string connectionStringDB = Environment.GetEnvironmentVariable("DATA_BASE_URL") ?? throw new ArgumentNullException("DATA_BASE_URL is not set");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionStringDB));
 #endregion
 
 #region Logging Configuration
+Log.Information("Configurando Serilog para logging");
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services));
