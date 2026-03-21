@@ -2,13 +2,21 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Resend;
 using Serilog;
+using TiendaUCN.src.Application.Services.Implements;
+using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Infrastructure.Data;
+using TiendaUCN.src.Infrastructure.Repositories.Implements;
+using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 #region Email Service Configuration
 Log.Information("Configurando servicio de correo electrónico Resend");
