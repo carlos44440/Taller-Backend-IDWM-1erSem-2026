@@ -57,17 +57,19 @@ cp .env.example .env
 Configurar las variables de **.env**:
 ```bash
 DATA_BASE_URL = Data Source=<nombreBD>.db
+RESEND_API_KEY = tu_resend_api_key
 ```
+- Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys)
 
 Crear el archivo **appsettings.json**:
 ```bash
 cp appsettings.example.json appsettings.json
 ```
 
-
+Actualizar las siguientes variables en las seccion **EmailConfiguration** de **appsettings.json**:
+- Reemplace `WelcomeSubject`, `From` y `VerificationSubject` con sus propias variables de correo electrónico, pero se recomienda usar el dominio de correo electrónico `<onboarding@resend.dev>` para usar el plan gratuito de la API de reenvío.
 
 Actualizar las siguientes variables en las seccion **User** de **appsettings.json**:
-
 - `Name` con un nombre para el admin
 - `Email` siguiendo este formato example@dominio.cl
 - `Rut` siguiendo este formato XXXXXXXX-X
