@@ -58,8 +58,10 @@ Configurar las variables de **.env**:
 ```bash
 DATA_BASE_URL = Data Source=<nombreBD>.db
 RESEND_API_KEY = tu_resend_api_key
+JWT_SECRET = your_jwt_secret_key
 ```
 - Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys)
+- Reemplace `JWT_SECRET` con una clave secreta segura de al menos 32 caracteres.
 
 Crear el archivo **appsettings.json**:
 ```bash
