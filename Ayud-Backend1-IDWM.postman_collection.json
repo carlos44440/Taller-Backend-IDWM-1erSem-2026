@@ -1,0 +1,353 @@
+{
+	"info": {
+		"_postman_id": "d2f28540-9db4-422f-be32-37413d770421",
+		"name": "Ayud-Backend-IDWM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37924574",
+		"_collection_link": "https://taller1-intdeswebmovil-postmna.postman.co/workspace/Taller1-IntDesWebMovil-Postmna-~57442294-81d9-4bef-837e-21ceec817dcb/collection/37924574-d2f28540-9db4-422f-be32-37413d770421?action=share&source=collection_link&creator=37924574"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"Carlos Arauco\",\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Rut\": \"24763022-8\",\r\n    \"PhoneNumber\": \"+569 41866108\",\r\n    \"BirthDate\": \"2004-10-01\",\r\n    \"Gender\": \"Otro\",\r\n    \"Password\": \"Carlos123.\",\r\n    \"ConfirmPassword\": \"Carlos123.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}auth/register",
+					"host": [
+						"{{baseurl}}auth"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Carlos Arauco\",\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Rut\": \"24763022-8\",\r\n    \"PhoneNumber\": \"+569 41866108\",\r\n    \"BirthDate\": \"2004-10-01\",\r\n    \"Gender\": \"Otro\",\r\n    \"Password\": \"Carlos123.\",\r\n    \"ConfirmPassword\": \"Carlos123.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}auth/register",
+							"host": [
+								"{{baseurl}}auth"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 22 Mar 2026 22:06:15 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Registro exitoso\",\n    \"data\": \"Se ha enviado un código de verificación a su correo electrónico, este código expirará en 3 minutos.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "EmailVerification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"VerificationCode\": \"649495\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}auth/email-verification",
+					"host": [
+						"{{baseurl}}auth"
+					],
+					"path": [
+						"email-verification"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "EmailVerification",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"VerificationCode\": \"649495\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}auth/email-verification",
+							"host": [
+								"{{baseurl}}auth"
+							],
+							"path": [
+								"email-verification"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 22 Mar 2026 22:06:36 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Correo electrónico verificado exitosamente\",\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response.json();\r",
+							"if (pm.response.code === 200 && response.data !== null && response.data !== undefined) {\r",
+							"    pm.collectionVariables.set(\"token\", response.data);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Password\": \"Carlos123.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}auth/login",
+					"host": [
+						"{{baseurl}}auth"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Password\": \"Carlos123.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}auth/login",
+							"host": [
+								"{{baseurl}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 22 Mar 2026 22:07:08 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Inicio de sesión exitoso\",\n    \"data\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImNhcmxvczUxMzJmY0BnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDdXN0b21lciIsImp0aSI6ImFlZGFjNGI3LTQyYjctNDY0MS05OGJiLWRlZmQwYWI5NDM2YiIsImV4cCI6MTc3NDMwMzYyOH0.gFPF214u0ptrYDAbtQTGil7nCOq1O1bW8eot0m-t5cs\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}auth/logout",
+					"host": [
+						"{{baseurl}}auth"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Logout",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}auth/logout",
+							"host": [
+								"{{baseurl}}auth"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 22 Mar 2026 22:07:16 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Logout exitoso.\",\n    \"data\": null\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
