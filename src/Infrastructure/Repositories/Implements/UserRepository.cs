@@ -62,18 +62,8 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 
         public async Task<bool> MarkEmailAsVerifiedAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            user.EmailConfirmed = true;
-            user.VerificationCode = null;
-            user.VerificationCodeExpiry = null;
-            await _context.SaveChangesAsync();
-            return true;
+            var result = await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(u => u.SetProperty(x => x.EmailConfirmed, true));
+            return result > 0;
         }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tienda_UCN_api.src.Application.DTO;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
@@ -35,6 +36,15 @@ namespace TiendaUCN.src.API.Controllers
         {
             var token = await _userService.LoginAsync(loginDTO);
             return Ok(new GenericResponse<string>("Inicio de sesión exitoso", token));
+        }
+
+        [HttpPost("logout")]
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<IActionResult> Logout()
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+            var message = await _userService.LogoutAsync(token);
+            return Ok(new GenericResponse<string>(message, null));
         }
     }
 }

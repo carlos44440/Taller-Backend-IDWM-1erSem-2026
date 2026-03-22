@@ -85,6 +85,13 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             Log.Warning($"Intento de verificación fallido: No se encontró un usuario con el correo {emailVerificationDTO.Email}");
 
+            // Validar si el correo electrónico ya está verificado
+            if (user.EmailConfirmed)
+            {
+                Log.Warning($"Intento de verificación fallido: El correo electrónico ya está verificado para el usuario {emailVerificationDTO.Email}");
+                throw new InvalidOperationException("El correo electrónico ya está verificado.");
+            }
+
             // Validar la expiración del código de verificación
             if (user.VerificationCodeExpiry < DateTime.UtcNow)
             {
@@ -159,6 +166,22 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             Log.Information($"Inicio de sesión exitoso para el usuario: {loginDTO.Email}");
             return token;
+        }
+
+        public async Task<string> LogoutAsync(string token)
+        {
+            // Validar que se haya proporcionado un token
+            if (string.IsNullOrEmpty(token))
+            {
+                Log.Warning("Intento de logout fallido: Token no proporcionado");
+                throw new ArgumentException("Token es requerido para el logout.");
+            }
+
+            // Agregar el token a la blacklist
+            await _tokenService.AddToBlacklistAsync(token);
+
+            Log.Information($"Token JWT agregado a la blacklist: {token}");
+            return "Logout exitoso.";
         }
     }
 }

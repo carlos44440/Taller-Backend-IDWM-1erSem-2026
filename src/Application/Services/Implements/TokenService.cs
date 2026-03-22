@@ -4,15 +4,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
+using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
     public class TokenService : ITokenService
     {
         private readonly string _jwtSecret;
+        private readonly ITokenRepository _tokenRepository;
 
-        public TokenService()
+        public TokenService(ITokenRepository tokenRepository)
         {
+            _tokenRepository = tokenRepository;
             _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? throw new InvalidOperationException("JWT secret key is not configured.");
         }
         public string GenerateToken(User user, string roleName)
@@ -24,7 +27,8 @@ namespace TiendaUCN.src.Application.Services.Implements
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim(ClaimTypes.Role, roleName)
+                    new Claim(ClaimTypes.Role, roleName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Reclamación del ID único del token
                 };
 
                 // Creamos la clave de seguridad
@@ -36,7 +40,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 // Creamos el token
                 var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.Now.AddHours(24), // El token expira en 24 horas
+                    expires: DateTime.UtcNow.AddHours(24), // El token expira en 24 horas
                     signingCredentials: creds
                 );
 
@@ -49,6 +53,54 @@ namespace TiendaUCN.src.Application.Services.Implements
                 Log.Error(ex, "Error al generar el token JWT para el usuario {UserId}", user.Id);
                 throw new InvalidOperationException("Error al generar el token JWT", ex);
             }
+        }
+
+        public async Task AddToBlacklistAsync(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            // Extrae el jti qeu representa el ID único del token y la fecha de expiración
+            var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value
+                ?? throw new InvalidOperationException("El token no contiene un jti válido para agregar a la blacklist");
+            var expireAt = jwtToken.ValidTo;
+
+            // Verifica si el token ya está en la blacklist antes de agregarlo
+            var isBlacklisted = await _tokenRepository.IsBlacklistedAsync(jti);
+            if (isBlacklisted)
+            {
+                Log.Warning("Intento de agregar a blacklist un token que ya está en la blacklist: {TokenId}", jti);
+                throw new InvalidOperationException("El token ya está en la blacklist.");
+            }
+
+            // Almacena en la blacklist
+            var blacklistedToken = new BlacklistedToken
+            {
+                TokenId = jti,
+                ExpireAt = expireAt
+            };
+
+            await _tokenRepository.AddAsync(blacklistedToken);
+        }
+
+        public async Task<bool> IsTokenBlacklistedAsync(string token)
+        {
+            // Lee el token JWT para extraer el jti
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            // Extrae el jti del token
+            var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
+
+            // Verifica si el jti está en la blacklist
+            if (jti != null)
+            {
+                var isBlacklisted = await _tokenRepository.IsBlacklistedAsync(jti);
+                return isBlacklisted;
+            }
+
+            Log.Warning("El token no contiene un jti válido para verificar en la blacklist");
+            throw new InvalidOperationException("El token no contiene un jti válido.");
         }
     }
 }
