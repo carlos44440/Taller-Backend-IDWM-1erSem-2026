@@ -22,5 +22,12 @@ namespace TiendaUCN.src.API.Controllers
             var message = await _userService.RegisterAsync(registerDTO);
             return Ok(new GenericResponse<string>("Registro exitoso", message));
         }
+
+        [HttpPost("email-verification")]
+        public async Task<IActionResult> EmailVerification([FromBody] EmailVerificationDTO emailVerificationDTO)
+        {
+            await _userService.EmailVerificationAsync(emailVerificationDTO);
+            return Ok(new GenericResponse<string>("Correo electrónico verificado exitosamente", null));
+        }
     }
 }

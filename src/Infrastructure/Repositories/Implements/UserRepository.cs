@@ -54,5 +54,26 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new KeyNotFoundException("No se encontró un usuario con el correo proporcionado.");
+        }
+
+        public async Task<bool> MarkEmailAsVerifiedAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.EmailConfirmed = true;
+            user.VerificationCode = null;
+            user.VerificationCodeExpiry = null;
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

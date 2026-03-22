@@ -10,5 +10,7 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> ExistsByPhoneNumberAsync(string phoneNumber);
         Task<int> CreateAsync(User user);
         Task<bool> SaveVerificationCodeAsync(int userId, string verificationCode, DateTime verificationCodeExpiry);
+        Task<User> GetByEmailAsync(string email);
+        Task<bool> MarkEmailAsVerifiedAsync(int id);
     }
 }

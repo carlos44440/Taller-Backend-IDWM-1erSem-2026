@@ -67,26 +67,68 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
             Log.Information($"Registro exitoso para el usuario: {registerDTO.Email} con Id: {userId}");
 
-            // Generar código de verificación
-            string VerificationCode = new Random().Next(100000, 999999).ToString();
-            DateTime VerificationCodeExpiry = DateTime.UtcNow.AddMinutes(_verificationCodeExpiry);
-            Log.Information($"Código de verificación generado para el usuario: {registerDTO.Email} - Código: {VerificationCode}");
-
-            // Guardar el código de verificación y su fecha de expiración en el usuario
-            bool isSaved = await _userRepository.SaveVerificationCodeAsync(userId, VerificationCode, VerificationCodeExpiry);
-            if (!isSaved)
-            {
-                Log.Error($"Error al guardar el código de verificación para el usuario: {registerDTO.Email}");
-                throw new InvalidOperationException("Error al guardar el código de verificación.");
-            }
-
-            // Enviar el código de verificación por correo electrónico
-            await _emailService.SendVerificationCodeEmailAsync(registerDTO.Email, VerificationCode);
-            Log.Information($"Se ha enviado un código de verificación al correo electrónico: {registerDTO.Email}");
+            // Generar y enviar el código de verificación
+            await GenerateAndSendVerificationCodeAsync(user.Id, user.Email);
 
             // Retornar mensaje de éxito
             return $"Se ha enviado un código de verificación a su correo electrónico, este código expirará en {_verificationCodeExpiry} minutos.";
 
+        }
+
+        public async Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO)
+        {
+            // Obtener el usuario por correo electrónico
+            User user = await _userRepository.GetByEmailAsync(emailVerificationDTO.Email)
+                ?? throw new KeyNotFoundException("No se encontró un usuario con el correo proporcionado.");
+
+            Log.Warning($"Intento de verificación fallido: No se encontró un usuario con el correo {emailVerificationDTO.Email}");
+
+            // Validar la expiración del código de verificación
+            if (user.VerificationCodeExpiry < DateTime.UtcNow)
+            {
+                // Generar y enviar un nuevo código de verificación
+                await GenerateAndSendVerificationCodeAsync(user.Id, user.Email);
+
+                Log.Warning($"Intento de verificación fallido: Código de verificación expirado para el usuario {emailVerificationDTO.Email}");
+                throw new InvalidOperationException("El código de verificación ha expirado, se ha enviado un nuevo código a su correo electrónico.");
+            }
+
+            // Validar el código de verificación
+            if (user.VerificationCode != emailVerificationDTO.VerificationCode)
+            {
+                Log.Warning($"Intento de verificación fallido: Código de verificación incorrecto para el usuario {emailVerificationDTO.Email}");
+                throw new InvalidOperationException("Código de verificación incorrecto.");
+            }
+
+            // Marcar el correo electrónico como verificado
+            bool isVerified = await _userRepository.MarkEmailAsVerifiedAsync(user.Id);
+            if (!isVerified)
+            {
+                Log.Error($"Error al marcar el correo electrónico como verificado para el usuario {emailVerificationDTO.Email}");
+                throw new InvalidOperationException("Error al verificar el correo electrónico.");
+            }
+
+            // Enviar correo de bienvenida
+            await _emailService.SendWelcomeEmailAsync(user.Email);
+
+            Log.Information($"Correo electrónico verificado exitosamente para el usuario {emailVerificationDTO.Email}");
+        }
+
+        private async Task GenerateAndSendVerificationCodeAsync(int userId, string email)
+        {
+            string verificationCode = new Random().Next(100000, 999999).ToString();
+            DateTime verificationCodeExpiry = DateTime.UtcNow.AddMinutes(_verificationCodeExpiry);
+            Log.Information($"Código de verificación generado para el usuario: {email} - Código: {verificationCode}");
+
+            bool isSaved = await _userRepository.SaveVerificationCodeAsync(userId, verificationCode, verificationCodeExpiry);
+            if (!isSaved)
+            {
+                Log.Error($"Error al guardar el código de verificación para el usuario: {email}");
+                throw new InvalidOperationException("Error al guardar el código de verificación.");
+            }
+
+            await _emailService.SendVerificationCodeEmailAsync(email, verificationCode);
+            Log.Information($"Se ha enviado un código de verificación al correo electrónico: {email}");
         }
     }
 }

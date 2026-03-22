@@ -5,6 +5,7 @@ namespace TiendaUCN.src.Application.Services.Interfaces
     public interface IUserService
     {
         Task<string> RegisterAsync(RegisterDTO registerDTO);
+        Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO);
 
     }
 }
