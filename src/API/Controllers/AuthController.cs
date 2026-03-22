@@ -29,5 +29,12 @@ namespace TiendaUCN.src.API.Controllers
             await _userService.EmailVerificationAsync(emailVerificationDTO);
             return Ok(new GenericResponse<string>("Correo electrónico verificado exitosamente", null));
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        {
+            var token = await _userService.LoginAsync(loginDTO);
+            return Ok(new GenericResponse<string>("Inicio de sesión exitoso", token));
+        }
     }
 }

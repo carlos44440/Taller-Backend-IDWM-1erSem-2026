@@ -57,7 +57,7 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new KeyNotFoundException("No se encontró un usuario con el correo proporcionado.");
+            return await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email) ?? null!;
         }
 
         public async Task<bool> MarkEmailAsVerifiedAsync(int id)

@@ -6,6 +6,6 @@ namespace TiendaUCN.src.Application.Services.Interfaces
     {
         Task<string> RegisterAsync(RegisterDTO registerDTO);
         Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO);
-
+        Task<string> LoginAsync(LoginDTO loginDTO);
     }
 }

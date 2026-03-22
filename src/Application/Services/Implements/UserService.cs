@@ -13,13 +13,15 @@ namespace TiendaUCN.src.Application.Services.Implements
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly ITokenService _tokenService;
         private readonly int _verificationCodeExpiry;
 
-        public UserService(IEmailService emailService, IUserRepository userRepository, IConfiguration configuration)
+        public UserService(IEmailService emailService, IUserRepository userRepository, IConfiguration configuration, ITokenService tokenService)
         {
             _emailService = emailService;
             _userRepository = userRepository;
             _configuration = configuration;
+            _tokenService = tokenService;
             _verificationCodeExpiry = _configuration.GetValue<int>("VerificationCode:ExpirationTimeInMinutes");
         }
 
@@ -129,6 +131,34 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             await _emailService.SendVerificationCodeEmailAsync(email, verificationCode);
             Log.Information($"Se ha enviado un código de verificación al correo electrónico: {email}");
+        }
+
+        public async Task<string> LoginAsync(LoginDTO loginDTO)
+        {
+            // Obtener el usuario por correo electrónico
+            User user = await _userRepository.GetByEmailAsync(loginDTO.Email)
+                ?? throw new KeyNotFoundException("Credenciales inválidas.");
+
+            // Validar la contraseña
+            if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.PasswordHash))
+            {
+                Log.Warning($"Intento de inicio de sesión fallido: Contraseña incorrecta para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales inválidas.");
+            }
+
+            // Validar si el correo electrónico está verificado
+            if (!user.EmailConfirmed)
+            {
+                Log.Warning($"Intento de inicio de sesión fallido: Correo electrónico no verificado para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales inválidas. Por favor, verifica tu correo electrónico antes de iniciar sesión.");
+            }
+
+            // Generar token JWT
+            string token = _tokenService.GenerateToken(user, user.Role.Name);
+            Log.Information($"Token JWT generado para el usuario: {token}");
+
+            Log.Information($"Inicio de sesión exitoso para el usuario: {loginDTO.Email}");
+            return token;
         }
     }
 }
