@@ -60,7 +60,7 @@ DATA_BASE_URL = Data Source=<nombreBD>.db
 RESEND_API_KEY = tu_resend_api_key
 JWT_SECRET = your_jwt_secret_key
 ```
-- Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys)
+- Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys).
 - Reemplace `JWT_SECRET` con una clave secreta segura de al menos 32 caracteres.
 
 Crear el archivo **appsettings.json**:
@@ -69,7 +69,9 @@ cp appsettings.example.json appsettings.json
 ```
 
 Actualizar las siguientes variables en las seccion **EmailConfiguration** de **appsettings.json**:
-- Reemplace `WelcomeSubject`, `From` y `VerificationSubject` con sus propias variables de correo electrónico, pero se recomienda usar el dominio de correo electrónico `<onboarding@resend.dev>` para usar el plan gratuito de la API de reenvío.
+- Reemplace `WelcomeSubject` con su asunto para el correo de bienvenida.
+- Reemplace `From` con la dirección de salida con el valor `Tienda - UCN <onboarding@resend.dev>`. Ten en cuenta que, al usar el dominio de prueba, solo podrás enviar correos a la dirección con la que te registraste en Resend.
+- Reemplace `VerificationSubject` con su asunto para el correo de verificación.
 
 Actualizar las siguientes variables en las seccion **User** de **appsettings.json**:
 - `Name` con un nombre para el admin
