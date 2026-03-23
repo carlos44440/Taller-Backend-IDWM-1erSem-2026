@@ -1,3 +1,4 @@
+using Mapster;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
 using TiendaUCN.src.Domain.Models;
 
@@ -5,21 +6,18 @@ namespace TiendaUCN.src.Application.Mappers
 {
     public class UserMapper
     {
-        public static User ToUser(RegisterDTO registerDTO)
+        public void ConfigureAllMappings()
         {
-            return new User
-            {
-                Name = registerDTO.Name,
-                Email = registerDTO.Email,
-                EmailConfirmed = false,
-                Rut = registerDTO.Rut,
-                PhoneNumber = registerDTO.PhoneNumber,
-                BirthDate = registerDTO.BirthDate,
-                Gender = registerDTO.Gender,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDTO.Password), // Encriptar la contraseña
-                RoleId = 2, // Asignar el rol de cliente por defecto
-                IsDeleted = false
-            };
+            ConfigureAuthMappings();
+        }
+
+        private void ConfigureAuthMappings()
+        {
+            TypeAdapterConfig<RegisterDTO, User>.NewConfig()
+                .Map(dest => dest.EmailConfirmed, src => false)
+                .Map(dest => dest.PasswordHash, src => BCrypt.Net.BCrypt.HashPassword(src.Password)) // Encriptar la contraseña
+                .Map(dest => dest.RoleId, src => 2) // Asignar el rol de cliente por defecto
+                .Map(dest => dest.IsDeleted, src => false);
         }
     }
 }

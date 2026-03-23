@@ -5,7 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using Resend;
 using Serilog;
 using System.Text;
+using Tienda_UCN_api.Src.Application.Mappers;
 using TiendaUCN.src.API.Middlewares;
+using TiendaUCN.src.Application.Mappers;
 using TiendaUCN.src.Application.Services.Implements;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Infrastructure.Data;
@@ -19,6 +21,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
+// Configuración de mapeadores
+builder.Services.AddScoped<UserMapper>();
+
+// Configuración de servicios y repositorios
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -73,11 +79,14 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 
 var app = builder.Build();
 
-#region Database Migration
+#region Database Migration and Mapster Configuration
 Log.Information("Aplicando migraciones a la base de datos");
 using (var scope = app.Services.CreateScope())
 {
     await DataSeeder.Initialize(scope.ServiceProvider);
+
+    // Configurar los mapeos de Mapster
+    MapperExtensions.ConfigureMapster(scope.ServiceProvider);
 }
 #endregion
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Infrastructure.Data;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
@@ -14,11 +15,10 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             _context = context;
         }
 
-        public async Task<int> CreateAsync(User user)
+        public async Task CreateAsync(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return user.Id;
         }
 
         public async Task<bool> ExistsByNameAsync(string name)
@@ -55,9 +55,9 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return true;
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email) ?? null!;
+            return await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<bool> MarkEmailAsVerifiedAsync(int id)
