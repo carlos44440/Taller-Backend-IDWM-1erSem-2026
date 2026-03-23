@@ -73,13 +73,14 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new InvalidOperationException("El token ya está en la blacklist.");
             }
 
-            // Almacena en la blacklist
+            // Mappea el token a un modelo de blacklist
             var blacklistedToken = new BlacklistedToken
             {
                 TokenId = jti,
                 ExpireAt = expireAt
             };
 
+            // Almacena en la blacklist
             await _tokenRepository.AddAsync(blacklistedToken);
         }
 

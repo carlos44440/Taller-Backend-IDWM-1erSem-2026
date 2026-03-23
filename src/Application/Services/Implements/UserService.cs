@@ -1,3 +1,4 @@
+using Mapster;
 using Serilog;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
 using TiendaUCN.src.Application.Mappers;
@@ -60,14 +61,10 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             // Crear el usuario
-            User user = UserMapper.ToUser(registerDTO);
-            int userId = await _userRepository.CreateAsync(user);
-            if (userId == 0)
-            {
-                Log.Error($"Error al crear el usuario con correo: {registerDTO.Email}");
-                throw new InvalidOperationException("Error al crear el usuario.");
-            }
-            Log.Information($"Registro exitoso para el usuario: {registerDTO.Email} con Id: {userId}");
+            var user = registerDTO.Adapt<User>();
+            await _userRepository.CreateAsync(user);
+
+            Log.Information($"Registro exitoso para el usuario: {user.Email} con Id: {user.Id}");
 
             // Generar y enviar el código de verificación
             await GenerateAndSendVerificationCodeAsync(user.Id, user.Email);
@@ -80,10 +77,12 @@ namespace TiendaUCN.src.Application.Services.Implements
         public async Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO)
         {
             // Obtener el usuario por correo electrónico
-            User user = await _userRepository.GetByEmailAsync(emailVerificationDTO.Email)
-                ?? throw new KeyNotFoundException("No se encontró un usuario con el correo proporcionado.");
-
-            Log.Warning($"Intento de verificación fallido: No se encontró un usuario con el correo {emailVerificationDTO.Email}");
+            User? user = await _userRepository.GetByEmailAsync(emailVerificationDTO.Email);
+            if (user == null)
+            {
+                Log.Warning($"Intento de verificación fallido: No se encontró un usuario con el correo {emailVerificationDTO.Email}");
+                throw new KeyNotFoundException("No se encontró un usuario con el correo proporcionado.");
+            }
 
             // Validar si el correo electrónico ya está verificado
             if (user.EmailConfirmed)

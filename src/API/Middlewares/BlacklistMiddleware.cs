@@ -16,7 +16,13 @@ namespace TiendaUCN.src.API.Middlewares
             if (tokenService == null)
             {
                 // Manejo en caso de que no se resuelva el servicio.
-                await _next(context);
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/json";
+                var json = JsonSerializer.Serialize(
+                    new ErrorDetail("Error interno del servidor", "No se pudo resolver el servicio de tokens."),
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
+                );
+                await context.Response.WriteAsync(json);
                 return;
             }
 
