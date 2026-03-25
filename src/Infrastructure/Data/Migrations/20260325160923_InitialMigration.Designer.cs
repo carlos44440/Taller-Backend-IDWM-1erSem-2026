@@ -11,8 +11,8 @@ using TiendaUCN.src.Infrastructure.Data;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260325155139_SecondMigration")]
-    partial class SecondMigration
+    [Migration("20260325160923_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -364,7 +364,7 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("VerificationCode");
+                    b.ToTable("VerificationCodes");
                 });
 
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.Cart", b =>

@@ -107,14 +107,13 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    VerificationCode = table.Column<string>(type: "TEXT", nullable: true),
-                    VerificationCodeExpiry = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Rut = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Gender = table.Column<string>(type: "TEXT", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
                     RoleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -189,6 +188,29 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VerificationCodes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
+                    Expiry = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FailedAttempts = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateToResend = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VerificationCodes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VerificationCodes_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -306,6 +328,12 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerificationCodes_UserId",
+                table: "VerificationCodes",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -322,6 +350,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "VerificationCodes");
 
             migrationBuilder.DropTable(
                 name: "Carts");

@@ -361,7 +361,7 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("VerificationCode");
+                    b.ToTable("VerificationCodes");
                 });
 
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.Cart", b =>
