@@ -1,5 +1,8 @@
 using DotNetEnv;
+using Hangfire;
+using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Resend;
@@ -77,7 +80,35 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Services(services));
 #endregion
 
+#region Hangfire Configuration
+Log.Information("Configurando los trabajos en segundo plano de Hangfire");
+var cronExpressionDeleteUnconfirmedUsers = builder.Configuration["Jobs:CronJobDeleteUnconfirmedUsers"] ?? throw new InvalidOperationException("La expresión cron para eliminar usuarios no confirmados no está configurada.");
+var cronExpressionDeleteExpiredTokens = builder.Configuration["Jobs:CronJobDeleteExpiredTokens"] ?? throw new InvalidOperationException("La expresión cron para eliminar tokens expirados no está configurada.");
+var timeZone = TimeZoneInfo.FindSystemTimeZoneById(builder.Configuration["Jobs:TimeZone"] ?? throw new InvalidOperationException("La zona horaria para los trabajos no está configurada."));
+builder.Services.AddHangfire(configuration =>
+{
+    var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionStringDB);
+    var databasePath = connectionStringBuilder.DataSource;
+
+    configuration.UseSQLiteStorage(databasePath);
+    configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170);
+    configuration.UseSimpleAssemblyNameTypeSerializer();
+    configuration.UseRecommendedSerializerSettings();
+});
+builder.Services.AddHangfireServer();
+#endregion
+
 var app = builder.Build();
+
+#region Hangfire Dashboard Configuration
+Log.Information("Configurando el panel de control de Hangfire");
+app.UseHangfireDashboard(builder.Configuration["HangfireDashboard:DashboardPath"] ?? throw new InvalidOperationException("La ruta de hangfire no ha sido declarada"), new DashboardOptions
+{
+    StatsPollingInterval = builder.Configuration.GetValue<int?>("HangfireDashboard:StatsPollingInterval") ?? throw new InvalidOperationException("El intervalo de actualización de estadísticas del panel de control de Hangfire no está configurado."),
+    DashboardTitle = builder.Configuration["HangfireDashboard:DashboardTitle"] ?? throw new InvalidOperationException("El título del panel de control de Hangfire no está configurado."),
+    DisplayStorageConnectionString = builder.Configuration.GetValue<bool?>("HangfireDashboard:DisplayStorageConnectionString") ?? throw new InvalidOperationException("La configuración 'HangfireDashboard:DisplayStorageConnectionString' no está definida."),
+});
+#endregion
 
 #region Database Migration and Mapster Configuration
 Log.Information("Aplicando migraciones a la base de datos");
