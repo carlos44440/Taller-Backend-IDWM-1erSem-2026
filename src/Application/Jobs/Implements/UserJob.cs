@@ -27,7 +27,7 @@ namespace TiendaUCN.src.Application.Jobs.Implements
         public async Task DeleteUnconfirmedUsersAsync()
         {
             Log.Information("Eliminando usuarios no confirmados...");
-            await _userService.DeleteUnconfirmedAsync();
+            await _userService.DeleteUnconfirmedUsersAsync();
         }
     }
 }

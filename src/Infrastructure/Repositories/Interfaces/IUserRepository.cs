@@ -9,8 +9,8 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> ExistsByRutAsync(string rut);
         Task<bool> ExistsByPhoneNumberAsync(string phoneNumber);
         Task CreateAsync(User user);
-        Task<bool> SaveVerificationCodeAsync(int userId, string verificationCode, DateTime verificationCodeExpiry);
         Task<User?> GetByEmailAsync(string email);
         Task<bool> MarkEmailAsVerifiedAsync(int id);
+        Task<int> DeleteUnconfirmedUsersAsync(int daysToDeleteUnverifiedAccount);
     }
 }

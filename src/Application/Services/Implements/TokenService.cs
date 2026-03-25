@@ -12,10 +12,14 @@ namespace TiendaUCN.src.Application.Services.Implements
     {
         private readonly string _jwtSecret;
         private readonly ITokenRepository _tokenRepository;
+        private readonly IConfiguration _configuration;
+        private readonly int _tokenExpirationInHours;
 
-        public TokenService(ITokenRepository tokenRepository)
+        public TokenService(ITokenRepository tokenRepository, IConfiguration configuration)
         {
             _tokenRepository = tokenRepository;
+            _configuration = configuration;
+            _tokenExpirationInHours = int.Parse(_configuration["Token:ExpirationTimeInHours"] ?? throw new InvalidOperationException("Token expiration time is not configured."));
             _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? throw new InvalidOperationException("JWT secret key is not configured.");
         }
         public string GenerateToken(User user, string roleName)
@@ -40,7 +44,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 // Creamos el token
                 var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.UtcNow.AddHours(24), // El token expira en 24 horas
+                    expires: DateTime.UtcNow.AddHours(_tokenExpirationInHours), // El token expirará en el tiempo configurado
                     signingCredentials: creds
                 );
 
@@ -102,6 +106,13 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             Log.Warning("El token no contiene un jti válido para verificar en la blacklist");
             throw new InvalidOperationException("El token no contiene un jti válido.");
+        }
+
+        public async Task<int> DeleteExpiredTokensInBlacklistAsync()
+        {
+            int deletedCount = await _tokenRepository.DeleteExpiredTokensAsync();
+            Log.Information("Tokens expirados eliminados de la blacklist: {DeletedCount}", deletedCount);
+            return deletedCount;
         }
     }
 }
