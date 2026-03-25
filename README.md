@@ -60,52 +60,77 @@ DATA_BASE_URL = Data Source=<nombreBD>.db
 RESEND_API_KEY = tu_resend_api_key
 JWT_SECRET = your_jwt_secret_key
 ```
+- Reemplace `<nombreBD>` por el nombre que tendra su base de datos.
 - Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys).
 - Reemplace `JWT_SECRET` con una clave secreta segura de al menos 32 caracteres.
+
+### 4. Establecer las configuraciones en appsettings.json
 
 Crear el archivo **appsettings.json**:
 ```bash
 cp appsettings.example.json appsettings.json
 ```
 
-Actualizar las siguientes variables en las seccion **EmailConfiguration** de **appsettings.json**:
-- Reemplace `WelcomeSubject` con su asunto para el correo de bienvenida.
-- Reemplace `From` con la dirección de salida con el valor `Tienda - UCN <onboarding@resend.dev>`. Ten en cuenta que, al usar el dominio de prueba, solo podrás enviar correos a la dirección con la que te registraste en Resend.
-- Reemplace `VerificationSubject` con su asunto para el correo de verificación.
+**En caso de considerar necesario actualizar las siguientes variables en cada sección:**
 
-Actualizar las siguientes variables en las seccion **User** de **appsettings.json**:
-- `Name` con un nombre para el admin
-- `Email` siguiendo este formato example@dominio.cl
-- `Rut` siguiendo este formato XXXXXXXX-X
-- `BirthDate` siguiendo este formato YYYY-MM-DD
-- `PhoneNumber` siguiendo este formato +569 XXXXXXXX
-- `Gender` con cualquiera de estas opciones "Masculino | Femenino | Otro"
-- `Password` y `RandomUserPassword` con una contraseña alfanumérica que contenga al menos una letra mayúscula y al menos un carácter especial.
+**Token:**
+- Reemplace `ExpirationTimeInHours` con la cantidad de horas tras las cuales expirarán los tokens.
 
-### 4. Instalar Entity Framework
+**VerificationCode:**
+- Reemplace `ExpirationTimeInMinutes` con el tiempo en minutos para que expire el código de verificación.
+- Reemplace `MaxFailedAttempts` con el número máximo de intentos fallidos permitidos, antes de que se bloquee la cuenta del usuario.
+- Reemplace `WaitingTimeInMinutesAfterResendEmail` con el tiempo de espera en minutos antes de permitir el reenvio de un nuevo correo de verificación.
+
+**EmailConfiguration**:
+- Reemplace `From` con la dirección de salida, se recomienda `Tienda - UCN <onboarding@resend.dev>`. Ten en cuenta que, al usar el dominio de prueba, solo podrás enviar correos a la dirección con la que te registraste en Resend.
+
+**Jobs:**
+- Reemplace `CronJobDeleteUnconfirmedUsers` con la expresión cron que define la ejecución automática para eliminar usuarios no verificados. **Valor recomendado:** `30 20 * * *` (ejecuta la tarea diariamente a las 20:30).
+- Reemplace `CronJobDeleteExpiredTokens` con la expresión cron que define la ejecución automática para eliminar tokens expirados. **Valor recomendado:** `30 20 * * *` (ejecuta la tarea diariamente a las 20:30).
+- Reemplace `TimeZone` con la zona horaria utilizada para la ejecución de las tareas programadas. **Valor recomendado:** `Pacific SA Standard Time` (zona horaria de Chile).
+- Reemplace `DaysToDeleteUnverifiedAccount` con la cantidad de días máximos permitidos antes de eliminar una cuenta que no esta verificada.
+
+**HangfireDashboard:**
+- Reemplace `DashboardPath` con la ruta de acceso donde estará disponible el panel de control. **Valor recomendado:** `/hangfire`
+
+**User:**
+
+Datos del usuario administrador (`AdminUser`)
+- Reemplace `Name` con el nombre para el admin
+- Reemplace `Email` siguiendo este formato example@dominio.cl
+- Reemplace `Rut` siguiendo este formato XXXXXXXX-X
+- Reemplace `BirthDate` siguiendo este formato YYYY-MM-DD
+- Reemplace `PhoneNumber` siguiendo este formato +569 XXXXXXXX
+- Reemplace `Gender` con cualquiera de estas opciones "Masculino | Femenino | Otro"
+- Reemplace `Password` con una contraseña alfanumérica que contenga al menos una letra mayúscula y al menos un carácter especial.
+
+Contraseña para usuarios aleatorios
+- Reemplace `RandomUserPassword` con una contraseña alfanumérica que contenga al menos una letra mayúscula y al menos un carácter especial.
+
+### 5. Instalar Entity Framework
 ```bash
 dotnet tool install --global dotnet-ef
 ```
 
-### 5. Instalar Dependencias
+### 6. Instalar Dependencias
 
 ```bash
 dotnet restore
 ```
 
-### 6. Compilar el Proyecto
+### 7. Compilar el Proyecto
 
 ```bash
 dotnet build
 ```
 
-### 7. Crear Base de datos
+### 8. Crear Base de datos
 
 ```bash
 dotnet ef database update
 ```
 
-### 8. Ejecutar el Proyecto
+### 9. Ejecutar el Proyecto
 
 ```bash
 dotnet run
@@ -113,7 +138,7 @@ dotnet run
 
 El servicio estará disponible en: http://localhost:5254
 
-### 9. Visualizar Base de datos
+### 10. Visualizar Base de datos
 
 Abrir opciones en VsCode:
 
