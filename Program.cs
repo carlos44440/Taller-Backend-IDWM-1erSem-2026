@@ -37,6 +37,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
 builder.Services.AddScoped<IUserJob, UserJob>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 #region Email Service Configuration
 Log.Information("Configurando servicio de correo electrónico Resend");

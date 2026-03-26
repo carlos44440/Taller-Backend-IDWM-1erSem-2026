@@ -56,13 +56,19 @@ cp .env.example .env
 
 Configurar las variables de **.env**:
 ```bash
-DATA_BASE_URL = Data Source=<nombreBD>.db
-RESEND_API_KEY = tu_resend_api_key
-JWT_SECRET = your_jwt_secret_key
+DATA_BASE_URL= Data Source=<nombreBD>.db
+RESEND_API_KEY=tu_resend_api_key
+JWT_SECRET=your_jwt_secret_key
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 - Reemplace `<nombreBD>` por el nombre que tendra su base de datos.
 - Reemplace `RESEND_API_KEY` con su API key de resend; para ello puede obtener su API key en el siguiente enlace: [Resend - API keys](https://resend.com/api-keys).
 - Reemplace `JWT_SECRET` con una clave secreta segura de al menos 32 caracteres.
+- Reemplace `CLOUDINARY_CLOUD_NAME` con el nombre de su cloud de Cloudinary; puede encontrarlo en el dashboard de su cuenta en [Cloudinary](https://cloudinary.com/).
+- Reemplace `CLOUDINARY_API_KEY` con su API key de Cloudinary; puede crearla en la sección de `settings > API Keys`.
+- Reemplace `CLOUDINARY_API_SECRET` con su API secret de Cloudinary; puede extraerla de la API key creada.
 
 ### 4. Establecer las configuraciones en appsettings.json
 
