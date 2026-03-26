@@ -291,6 +291,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -324,17 +327,41 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("VerificationCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("VerificationCodeExpiry")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TiendaUCN.src.Domain.Models.VerificationCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateToResend")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expiry")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FailedAttempts")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("VerificationCodes");
                 });
 
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.Cart", b =>
@@ -438,6 +465,15 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("TiendaUCN.src.Domain.Models.VerificationCode", b =>
+                {
+                    b.HasOne("TiendaUCN.src.Domain.Models.User", null)
+                        .WithOne("VerificationCode")
+                        .HasForeignKey("TiendaUCN.src.Domain.Models.VerificationCode", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -462,6 +498,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("VerificationCode")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
