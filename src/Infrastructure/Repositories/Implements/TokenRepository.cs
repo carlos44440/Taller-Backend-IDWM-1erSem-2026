@@ -23,5 +23,14 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         {
             return await _context.BlacklistedTokens.AnyAsync(u => u.TokenId == tokenId);
         }
+
+        public async Task<int> DeleteExpiredTokensAsync()
+        {
+            // Elimina los tokens que han expirado, sin soft delete
+            var now = DateTime.UtcNow;
+            return await _context.BlacklistedTokens
+                .Where(t => t.ExpireAt < now)
+                .ExecuteDeleteAsync();
+        }
     }
 }

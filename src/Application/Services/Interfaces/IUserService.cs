@@ -8,5 +8,7 @@ namespace TiendaUCN.src.Application.Services.Interfaces
         Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO);
         Task<string> LoginAsync(LoginDTO loginDTO);
         Task<string> LogoutAsync(string token);
+        Task<int> DeleteUnconfirmedUsersAsync();
+        Task<string> ResendVerificationCodeAsync(ResendVerificationCodeDTO resendVerificationCodeDTO);
     }
 }
