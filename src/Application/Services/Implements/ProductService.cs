@@ -8,11 +8,13 @@ namespace TiendaUCN.src.Application.Services.Implements
         private readonly IProductRepository _productRepository;
         private readonly IImageService _imageService;
         private readonly IBrandRepository _brandRepository;
-        public ProductService(IProductRepository productRepository, IImageService imageService, IBrandRepository brandRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        public ProductService(IProductRepository productRepository, IImageService imageService, IBrandRepository brandRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _imageService = imageService;
             _brandRepository = brandRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
