@@ -14,6 +14,7 @@ namespace TiendaUCN.src.Domain.Models
         public ICollection<Image> Images { get; set; } = new List<Image>();
         public List<CartItem> CartItems { get; } = []; // Relación con CartItem (Un producto puede estar en muchos CartItems)
         public List<OrderItem> OrderItems { get; } = []; // Relación con OrderItem (Un producto puede estar en muchos OrderItems)
+        public bool IsActive { get; set; } = true; // Para marcar si el producto está activo o no
         public bool IsDeleted { get; set; } = false;
     }
 }

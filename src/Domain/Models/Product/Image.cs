@@ -7,6 +7,5 @@ namespace TiendaUCN.src.Domain.Models
         public required string PublicId { get; set; }
         public int ProductId { get; set; } // Establece la relación con Product (Un producto puede tener muchas imágenes)
         public Product Product { get; set; } = null!;
-        public bool IsDeleted { get; set; } = false;
     }
 }

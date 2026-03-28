@@ -11,7 +11,7 @@ using TiendaUCN.src.Infrastructure.Data;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260325160923_InitialMigration")]
+    [Migration("20260328192011_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -134,9 +134,6 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
@@ -244,6 +241,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
