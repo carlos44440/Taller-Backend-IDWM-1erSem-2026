@@ -19,7 +19,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateBrand(CreateBrandCategoryDTO createBrandDTO)
+        public async Task<IActionResult> CreateBrand([FromBody] CreateBrandCategoryDTO createBrandDTO)
         {
             var message = await _brandService.CreateBrandAsync(createBrandDTO);
             return Ok(new GenericResponse<string>(message, null));
@@ -27,7 +27,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpPut]
         [Route("update/{id}")]
-        public async Task<IActionResult> UpdateBrand(int id, UpdateBrandCategoryDTO updateBrandDTO)
+        public async Task<IActionResult> UpdateBrand([FromRoute] int id, [FromBody] UpdateBrandCategoryDTO updateBrandDTO)
         {
             var message = await _brandService.UpdateBrandAsync(id, updateBrandDTO);
             return Ok(new GenericResponse<string>(message, null));
@@ -35,7 +35,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<IActionResult> DeleteBrand(int id)
+        public async Task<IActionResult> DeleteBrand([FromRoute] int id)
         {
             var message = await _brandService.DeleteBrandAsync(id);
             return Ok(new GenericResponse<string>(message, null));
