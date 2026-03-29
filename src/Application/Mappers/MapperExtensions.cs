@@ -13,6 +13,9 @@ namespace Tienda_UCN_api.Src.Application.Mappers
             // Configuración de mapeos específicos
             var userMapper = serviceProvider.GetRequiredService<UserMapper>();
             userMapper.ConfigureAllMappings();
+
+            var productMapper = serviceProvider.GetRequiredService<ProductMapper>();
+            productMapper.ConfigureAllMappings();
         }
     }
 }

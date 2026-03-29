@@ -24,7 +24,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new InvalidOperationException($"Ya existe una categoría con el nombre '{categoryDto.Name}'.");
             }
 
-            // Crear una nueva instancia de Category
+            // Crear una nueva instancia de Category, no es necesario crear un mapeo específico
             var category = categoryDto.Adapt<Category>();
 
             // Guardar la categoría en el repositorio

@@ -28,7 +28,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             // Crear una nueva instancia de Brand
             var brand = brandDto.Adapt<Brand>();
 
-            // Guardar la marca en el repositorio
+            // Guardar la marca en el repositorio, no es necesario crear un mapeo específico
             var isCreated = await _brandRepository.CreateAsync(brand);
             if (!isCreated)
             {

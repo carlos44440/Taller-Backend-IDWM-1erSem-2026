@@ -11,5 +11,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> UpdateNameAsync(int id, string name);
         Task<bool> UpdateDescriptionAsync(int id, string description);
         Task<bool> DeleteAsync(int id);
+        Task<int> GetIdByNameAsync(string name);
     }
 }

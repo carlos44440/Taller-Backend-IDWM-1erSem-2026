@@ -50,5 +50,13 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .ExecuteUpdateAsync(b => b.SetProperty(x => x.IsDeleted, true));
             return result > 0;
         }
+
+        public async Task<int> GetIdByNameAsync(string name)
+        {
+            return await _context.Brands
+                .Where(b => b.Name.ToLower() == name.ToLower() && !b.IsDeleted)
+                .Select(b => b.Id)
+                .FirstOrDefaultAsync();
+        }
     }
 }

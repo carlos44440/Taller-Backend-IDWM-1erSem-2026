@@ -18,23 +18,20 @@ namespace TiendaUCN.src.API.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateBrandCategoryDTO createCategoryDTO)
         {
             var message = await _categoryService.CreateCategoryAsync(createCategoryDTO);
             return Ok(new GenericResponse<string>(message, null));
         }
 
-        [HttpPut]
-        [Route("update/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateBrandCategoryDTO updateCategoryDTO)
         {
             var message = await _categoryService.UpdateCategoryAsync(id, updateCategoryDTO);
             return Ok(new GenericResponse<string>(message, null));
         }
 
-        [HttpDelete]
-        [Route("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory([FromRoute] int id)
         {
             var message = await _categoryService.DeleteCategoryAsync(id);

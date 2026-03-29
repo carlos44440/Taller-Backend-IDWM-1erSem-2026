@@ -1,10 +1,11 @@
+using CloudinaryDotNet.Actions;
 using System.ComponentModel.DataAnnotations;
 
 namespace TiendaUCN.src.Application.DTOs.ProductDTO
 {
     public class CreateBrandCategoryDTO
     {
-        [Required]
+        [Required(ErrorMessage = "El nombre es obligatorio.")]
         [MinLength(3, ErrorMessage = "El nombre debe tener mínimo 3 letras.")]
         [MaxLength(25, ErrorMessage = "El nombre debe tener máximo 25 letras.")]
         public required string Name { get; set; }

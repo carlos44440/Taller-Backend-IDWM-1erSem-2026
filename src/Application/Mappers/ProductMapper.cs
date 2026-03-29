@@ -13,8 +13,6 @@ namespace TiendaUCN.src.Application.Mappers
 
         public void ConfigureProductMappings()
         {
-            TypeAdapterConfig<CreateBrandCategoryDTO, Brand>.NewConfig();
-            TypeAdapterConfig<CreateBrandCategoryDTO, Category>.NewConfig();
         }
     }
 }
