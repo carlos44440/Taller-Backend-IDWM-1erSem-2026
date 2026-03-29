@@ -69,5 +69,88 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             return product.Id.ToString();
         }
+
+        public async Task SwitchStatusProductAsync(int id)
+        {
+            var productExists = await _productRepository.ExistsByIdAsync(id);
+            if (!productExists)
+            {
+                Log.Error("Producto no encontrado con ID: {ProductId}", id);
+                throw new Exception("Producto no encontrado con ID: " + id);
+            }
+
+            var isUpdated = await _productRepository.SwitchStatusAsync(id);
+            if (!isUpdated)
+            {
+                Log.Error("Error al cambiar el estado del producto con ID: {ProductId}", id);
+                throw new Exception("Error al cambiar el estado del producto con ID: " + id);
+            }
+        }
+
+        public async Task<ProductDetailCustomerDTO> GetProductByIdForCustomerAsync(int id)
+        {
+            // Verificar si el producto existe
+            var productExists = await _productRepository.ExistsByIdCustomerAsync(id);
+            if (!productExists)
+            {
+                Log.Error("Producto no encontrado con ID: {ProductId}", id);
+                throw new KeyNotFoundException("Producto no encontrado con ID: " + id);
+            }
+
+            // Obtener el producto de la base de datos
+            var product = await _productRepository.GetProductByIdForCustomerAsync(id)
+                ?? throw new KeyNotFoundException("Producto no encontrado con ID: " + id);
+
+            // Si la categoría del producto está eliminada, asignar un nombre y descripción genéricos
+            if (product.Category.IsDeleted)
+            {
+                product.Category.Name = "Categoría eliminada";
+                product.Category.Description = "Categoría eliminada";
+            }
+
+            // Si la marca del producto está eliminada, asignar un nombre y descripción genéricos
+            if (product.Brand.IsDeleted)
+            {
+                product.Brand.Name = "Marca eliminada";
+                product.Brand.Description = "Marca eliminada";
+            }
+
+            // Mapear el producto a un DTO para el cliente
+            var productDetailCustomerDTO = product.Adapt<ProductDetailCustomerDTO>();
+            return productDetailCustomerDTO!;
+        }
+
+        public async Task<ProductDetailAdminDTO> GetProductByIdForAdminAsync(int id)
+        {
+            // Verificar si el producto existe
+            var productExists = await _productRepository.ExistsByIdAsync(id);
+            if (!productExists)
+            {
+                Log.Error("Producto no encontrado con ID: {ProductId}", id);
+                throw new KeyNotFoundException("Producto no encontrado con ID: " + id);
+            }
+
+            // Obtener el producto de la base de datos
+            Product product = await _productRepository.GetProductByIdForAdminAsync(id)
+                ?? throw new KeyNotFoundException("Producto no encontrado con ID: " + id);
+
+            // Si la categoría del producto está eliminada, asignar un nombre y descripción genéricos
+            if (product.Category.IsDeleted)
+            {
+                product.Category.Name = "Categoría no disponible";
+                product.Category.Description = "Categoría no disponible";
+            }
+
+            // Si la marca del producto está eliminada, asignar un nombre y descripción genéricos
+            if (product.Brand.IsDeleted)
+            {
+                product.Brand.Name = "Marca no disponible";
+                product.Brand.Description = "Marca no disponible";
+            }
+
+            // Mapear el producto a un DTO para el admin
+            var productDetailAdminDTO = product.Adapt<ProductDetailAdminDTO>();
+            return productDetailAdminDTO!;
+        }
     }
 }
