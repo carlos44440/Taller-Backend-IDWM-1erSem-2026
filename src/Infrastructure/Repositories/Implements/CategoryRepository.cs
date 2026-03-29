@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TiendaUCN.src.Infrastructure.Data;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
