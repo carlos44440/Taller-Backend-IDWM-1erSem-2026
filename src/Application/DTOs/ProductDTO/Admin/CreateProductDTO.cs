@@ -11,7 +11,7 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO
 
         [StringLength(100, ErrorMessage = "La descripción no puede exceder los 100 caracteres.")]
         [MinLength(10, ErrorMessage = "La descripción debe tener al menos 10 caracteres.")]
-        public string? Description { get; set; }
+        public required string Description { get; set; }
 
         [Required(ErrorMessage = "El precio del producto es obligatorio.")]
         [Range(0, int.MaxValue, ErrorMessage = "El precio debe ser un valor entero positivo.")]
@@ -32,6 +32,7 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO
         public required string BrandName { get; set; }
 
         [Required(ErrorMessage = "Las imágenes del producto son obligatorias.")]
-        public required List<IFormFile> Images { get; set; } = new List<IFormFile>();
+        [MinLength(1, ErrorMessage = "Debe proporcionar al menos una imagen para el producto.")]
+        public required List<IFormFile> ImagesFiles { get; set; }
     }
 }

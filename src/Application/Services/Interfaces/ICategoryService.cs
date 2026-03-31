@@ -1,5 +1,5 @@
 
-using TiendaUCN.src.Application.DTOs.ProductDTO;
+using TiendaUCN.src.Application.DTOs.BrandCategoryDTO;
 
 namespace TiendaUCN.src.Application.Services.Interfaces
 {

@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tienda_UCN_api.src.Application.DTO;
 using TiendaUCN.src.Application.DTOs.ProductDTO;
+using TiendaUCN.src.Application.DTOs.ProductDTO.Admin;
+using TiendaUCN.src.Application.DTOs.ProductDTO.Customer;
 using TiendaUCN.src.Application.Services.Interfaces;
 
 namespace TiendaUCN.src.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -18,33 +20,54 @@ namespace TiendaUCN.src.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO createProductDTO)
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDTO createProductDTO)
         {
             var result = await _productService.CreateProductAsync(createProductDTO);
-            return Created($"/api/product/{result}", new GenericResponse<string>("Producto creado exitosamente", result));
+            return Created($"api/product/{result}", new GenericResponse<string>("Producto creado exitosamente", result));
         }
 
-        [HttpPatch("/switch-status/{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpPatch("switch-status/{id}")]
         public async Task<IActionResult> SwitchStatusProductAsync([FromRoute] int id)
         {
-            await _productService.SwitchStatusProductAsync(id);
-            return Ok(new GenericResponse<string>("Estado del producto cambiado exitosamente", null));
+            var result = await _productService.SwitchStatusProductAsync(id);
+            return Ok(new GenericResponse<string>("Estado del producto cambiado exitosamente", result));
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductByIdForCustomerAsync([FromRoute] int id)
         {
             var result = await _productService.GetProductByIdForCustomerAsync(id);
             return Ok(new GenericResponse<ProductDetailCustomerDTO>("Producto encontrado exitosamente", result));
         }
 
-        [HttpGet("/admin/{id}")]
+        [HttpGet("admin/{id}")]
         public async Task<IActionResult> GetProductByIdForAdminAsync([FromRoute] int id)
         {
             var result = await _productService.GetProductByIdForAdminAsync(id);
             return Ok(new GenericResponse<ProductDetailAdminDTO>("Producto encontrado exitosamente", result));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProductAsync([FromRoute] int id)
+        {
+            await _productService.DeleteProductAsync(id);
+            return Ok(new GenericResponse<string>("Producto eliminado exitosamente", null));
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ListProductsForCustomerAsync([FromQuery] SearchParamsDTO searchParams)
+        {
+            var result = await _productService.GetListedProductsForCustomerAsync(searchParams);
+            return Ok(new GenericResponse<ListedProductsForCustomerDTO>("Productos encontrados exitosamente", result));
+        }
+
+        [HttpGet("admin")]
+        public async Task<IActionResult> ListProductsForAdminAsync([FromQuery] SearchParamsDTO searchParams)
+        {
+            var result = await _productService.GetListedProductsForAdminAsync(searchParams);
+            return Ok(new GenericResponse<ListedProductsForAdminDTO>("Productos encontrados exitosamente", result));
         }
     }
 }

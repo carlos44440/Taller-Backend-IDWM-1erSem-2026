@@ -5,7 +5,7 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO
         public required int Id { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
-        public required int Price { get; set; }
+        public required string Price { get; set; }
         public required int Stock { get; set; }
         public required string BrandName { get; set; }
         public required string BrandDescription { get; set; }

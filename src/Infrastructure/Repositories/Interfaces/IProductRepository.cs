@@ -1,3 +1,4 @@
+using CloudinaryDotNet;
 using TiendaUCN.src.Application.DTOs.ProductDTO;
 using TiendaUCN.src.Domain.Models;
 
@@ -9,8 +10,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> CreateAsync(Product product);
         Task<bool> ExistsByIdAsync(int id);
         Task<bool> SwitchStatusAsync(int id);
+        Task<string?> GetStatusAsync(int id);
         Task<bool> ExistsByIdCustomerAsync(int id);
         Task<Product?> GetProductByIdForCustomerAsync(int id);
         Task<Product?> GetProductByIdForAdminAsync(int id);
+        Task<bool> DeleteAsync(int id);
+        Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForAdminAsync(SearchParamsDTO searchParams);
+        Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForCustomerAsync(SearchParamsDTO searchParams);
     }
 }

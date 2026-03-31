@@ -1,6 +1,6 @@
 using Mapster;
 using Serilog;
-using TiendaUCN.src.Application.DTOs.ProductDTO;
+using TiendaUCN.src.Application.DTOs.BrandCategoryDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
