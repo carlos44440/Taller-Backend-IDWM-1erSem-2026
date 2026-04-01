@@ -11,7 +11,7 @@ using TiendaUCN.src.Infrastructure.Data;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260325160923_InitialMigration")]
+    [Migration("20260328212026_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -43,6 +43,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
@@ -112,6 +115,9 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -133,9 +139,6 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
@@ -241,9 +244,14 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
@@ -447,7 +455,7 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("TiendaUCN.src.Domain.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -482,6 +490,11 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     b.Navigation("CartItems");
                 });
 
+            modelBuilder.Entity("TiendaUCN.src.Domain.Models.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -498,7 +511,8 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("TiendaUCN.src.Domain.Models.User", b =>
                 {
-                    b.Navigation("Cart");
+                    b.Navigation("Cart")
+                        .IsRequired();
 
                     b.Navigation("Orders");
 

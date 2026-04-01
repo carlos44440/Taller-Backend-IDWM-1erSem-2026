@@ -28,17 +28,26 @@ builder.Services.AddControllers();
 
 // Configuración de mapeadores
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<ProductMapper>();
 
 // Configuración de servicios y repositorios
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
-builder.Services.AddScoped<IUserJob, UserJob>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+// Configuración de trabajos en segundo plano
+builder.Services.AddScoped<IUserJob, UserJob>();
 
 #region Email Service Configuration
 Log.Information("Configurando servicio de correo electrónico Resend");

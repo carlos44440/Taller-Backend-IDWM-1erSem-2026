@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Serilog;
 using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Infrastructure.Data;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
@@ -24,29 +22,45 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 
         public async Task<bool> ExistsByNameAsync(string name)
         {
-            return await _context.Users.AnyAsync(u => u.Name == name && u.IsDeleted == false);
+            return await _context.Users
+                .AnyAsync(u =>
+                    u.Name == name &&
+                    u.IsDeleted == false);
         }
 
         public async Task<bool> ExistsByEmailAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email && u.IsDeleted == false);
+            return await _context.Users
+                .AnyAsync(u =>
+                    u.Email.ToLower() == email.ToLower() &&
+                    u.IsDeleted == false);
         }
 
         public async Task<bool> ExistsByRutAsync(string rut)
         {
-            return await _context.Users.AnyAsync(u => u.Rut == rut && u.IsDeleted == false);
+            return await _context.Users
+                .AnyAsync(u =>
+                    u.Rut == rut &&
+                    u.IsDeleted == false);
         }
 
         public async Task<bool> ExistsByPhoneNumberAsync(string phoneNumber)
         {
-            return await _context.Users.AnyAsync(u => u.PhoneNumber == phoneNumber && u.IsDeleted == false);
+            return await _context.Users
+                .AnyAsync(u =>
+                    u.PhoneNumber == phoneNumber
+                    && u.IsDeleted == false);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
             // Incluir las entidades relacionadas Role y VerificationCode al obtener el usuario por correo electrónico
-            return await _context.Users.Include(u => u.Role).Include(u => u.VerificationCode)
-                .FirstOrDefaultAsync(u => u.Email == email && u.IsDeleted == false);
+            return await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.VerificationCode)
+                .FirstOrDefaultAsync(u =>
+                    u.Email.ToLower() == email.ToLower()
+                    && u.IsDeleted == false);
         }
 
         public async Task<bool> MarkEmailAsVerifiedAsync(int id)
@@ -62,11 +76,13 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             // Elimina los códigos de verificación
             // Asociados a los usuarios que cumplen con las condiciones de eliminación
             await _context.VerificationCodes
-                .Where(vc => _context.Users.Any(u =>
-                    u.Id == vc.UserId &&
-                    u.EmailConfirmed == false &&
-                    u.IsDeleted == false &&
-                    u.CreatedAt.AddDays(daysToDeleteUnverifiedAccount) <= now))
+                .Where(vc =>
+                    _context.Users
+                        .Any(u =>
+                            u.Id == vc.UserId &&
+                            u.EmailConfirmed == false &&
+                            u.IsDeleted == false &&
+                            u.CreatedAt.AddDays(daysToDeleteUnverifiedAccount) <= now))
                 .ExecuteDeleteAsync();
 
             // Elimina los usuarios que:

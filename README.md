@@ -99,6 +99,9 @@ cp appsettings.example.json appsettings.json
 **HangfireDashboard:**
 - Reemplace `DashboardPath` con la ruta de acceso donde estará disponible el panel de control. **Valor recomendado:** `/hangfire`
 
+**Products**
+- Reemplace `FewUnitsAvailable`  con el límite a partir del cual el stock de un producto se considera como `Pocas unidades disponibles`.
+
 **User:**
 
 Datos del usuario administrador (`AdminUser`)

@@ -6,9 +6,9 @@ namespace TiendaUCN.src.Domain.Models
         public required int Quantity { get; set; }
         public required int UnitPriceAtMoment { get; set; }
         public required string NameAtMoment { get; set; }
-        public string BrandAtMoment { get; set; } = string.Empty;
-        public string CategoryAtMoment { get; set; } = string.Empty;
-        public int SubtotalPrice { get; set; }
+        public required string BrandAtMoment { get; set; }
+        public required string CategoryAtMoment { get; set; }
+        public required int SubtotalPrice { get; set; }
         public int ProductId { get; set; } // Establece la relación con Product (Un producto puede estar en muchos OrderItems)
         public Product Product { get; set; } = null!;
         public int OrderId { get; set; } // Establece la relación con Order (Un pedido puede tener muchos OrderItems)
