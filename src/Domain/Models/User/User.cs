@@ -14,8 +14,8 @@ namespace TiendaUCN.src.Domain.Models
         public int RoleId { get; set; } = 2; // Establece la relación con Role (Un rol puede tener muchos usuarios)
         public Role Role { get; set; } = null!;
         public VerificationCode VerificationCode { get; set; } = null!; // Navegación opcional a VerificationCode
-        public Cart? Cart { get; set; }  // Referencia opcional a Cart
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public Cart Cart { get; set; } = null!;  // Referencia opcional a Cart
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; } = false;
     }
