@@ -1,5 +1,6 @@
 using CloudinaryDotNet;
 using TiendaUCN.src.Application.DTOs.ProductDTO;
+using TiendaUCN.src.Application.DTOs.ProductDTO.Admin;
 using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
@@ -17,5 +18,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> DeleteAsync(int id);
         Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForAdminAsync(SearchParamsDTO searchParams);
         Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForCustomerAsync(SearchParamsDTO searchParams);
+        Task<bool> UpdateAsync(Product product);
     }
 }

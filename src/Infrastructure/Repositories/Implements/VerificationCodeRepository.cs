@@ -23,7 +23,8 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         public async Task<bool> UpdateFailedAttemptsAsync(int id)
         {
             // Incrementa el contador de intentos fallidos para el código de verificación con el ID especificado
-            var result = await _context.VerificationCodes.Where(v => v.Id == id)
+            var result = await _context.VerificationCodes
+                .Where(v => v.Id == id)
                .ExecuteUpdateAsync(v => v.SetProperty(x => x.FailedAttempts, x => x.FailedAttempts + 1));
             return result > 0;
         }
@@ -31,7 +32,8 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         public async Task<bool> UpdateAsync(int id, string code, DateTime expiry)
         {
             // Actualiza el código de verificación y su fecha de expiración para el código con el ID especificado
-            var result = await _context.VerificationCodes.Where(v => v.Id == id)
+            var result = await _context.VerificationCodes
+                .Where(v => v.Id == id)
                 .ExecuteUpdateAsync(v => v.SetProperty(x => x.Code, code).SetProperty(x => x.Expiry, expiry));
             return result > 0;
         }

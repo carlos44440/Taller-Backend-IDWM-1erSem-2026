@@ -69,5 +69,12 @@ namespace TiendaUCN.src.API.Controllers
             var result = await _productService.GetListedProductsForAdminAsync(searchParams);
             return Ok(new GenericResponse<ListedProductsForAdminDTO>("Productos encontrados exitosamente", result));
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProductAsync([FromRoute] int id, [FromForm] UpdateProductDTO updateProductDTO)
+        {
+            await _productService.UpdateProductAsync(id, updateProductDTO);
+            return Ok(new GenericResponse<string>("Producto actualizado exitosamente", null));
+        }
     }
 }

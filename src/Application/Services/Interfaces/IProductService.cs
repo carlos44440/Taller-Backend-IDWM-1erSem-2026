@@ -13,5 +13,6 @@ namespace TiendaUCN.src.Application.Services.Interfaces
         Task DeleteProductAsync(int id);
         Task<ListedProductsForAdminDTO> GetListedProductsForAdminAsync(SearchParamsDTO searchParams);
         Task<ListedProductsForCustomerDTO> GetListedProductsForCustomerAsync(SearchParamsDTO searchParams);
+        Task UpdateProductAsync(int id, UpdateProductDTO updateProductDTO);
     }
 }

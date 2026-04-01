@@ -9,16 +9,17 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO
         [MinLength(3, ErrorMessage = "El nombre debe tener al menos 3 caracteres.")]
         public required string Name { get; set; }
 
+        [Required(ErrorMessage = "La descripción del producto es obligatoria.")]
         [StringLength(100, ErrorMessage = "La descripción no puede exceder los 100 caracteres.")]
         [MinLength(10, ErrorMessage = "La descripción debe tener al menos 10 caracteres.")]
         public required string Description { get; set; }
 
         [Required(ErrorMessage = "El precio del producto es obligatorio.")]
-        [Range(0, int.MaxValue, ErrorMessage = "El precio debe ser un valor entero positivo.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El precio debe ser un valor entero positivo mayor que cero.")]
         public required int Price { get; set; }
 
         [Required(ErrorMessage = "El stock del producto es obligatorio.")]
-        [Range(0, int.MaxValue, ErrorMessage = "El stock debe ser un valor positivo.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El stock debe ser un valor entero positivo mayor que cero.")]
         public required int Stock { get; set; }
 
         [Required(ErrorMessage = "El nombre de la categoría es obligatorio.")]
