@@ -8,6 +8,5 @@ namespace TiendaUCN.src.Domain.Models
         public Cart Cart { get; set; } = null!;
         public int ProductId { get; set; } // Establece la relación con Product (Un producto puede estar en muchos CartItems)
         public Product Product { get; set; } = null!;
-        public bool IsDeleted { get; set; } = false;
     }
 }
