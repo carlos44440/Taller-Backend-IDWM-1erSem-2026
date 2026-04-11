@@ -45,6 +45,8 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 // Configuración de trabajos en segundo plano
 builder.Services.AddScoped<IUserJob, UserJob>();
@@ -167,9 +169,10 @@ Log.Information($"Job recurrente '{jobId}' configurado con cron: {cronExpression
 #endregion
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseAuthentication();         // 1 — valida el JWT
-app.UseMiddleware<BlacklistMiddleware>(); // 2 — verifica blacklist
-app.UseAuthorization();          // 3 — verifica roles y permisos
+app.UseMiddleware<CartMiddleware>();    // 1. Maneja la cookie de carrito de compras para usuarios anónimos
+app.UseAuthentication();         // 2. Valida el JWT
+app.UseMiddleware<BlacklistMiddleware>(); // 3. Verifica blacklist
+app.UseAuthorization();          // 4. Verifica roles y permisos
 app.MapOpenApi();
 app.MapControllers();
 app.Run();
