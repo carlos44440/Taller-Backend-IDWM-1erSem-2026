@@ -209,5 +209,56 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             return cart;
         }
+
+        public async Task<CartDTO> UpdateCartItemQuantityAsync(string buyerId, AddChangeCartItemDTO changeCartItemDTO, int? userId = null)
+        {
+            // Obtener el carrito actual
+            var cart = await GetCartAsync(buyerId, userId);
+
+            // Obtener el producto
+            var product = await _productRepository.GetProductByIdForCustomerAsync(changeCartItemDTO.ProductId);
+
+            // Validar que el producto exista
+            if (product == null)
+            {
+                Log.Error("Producto no encontrado para ID: {ProductId}", changeCartItemDTO.ProductId);
+                throw new Exception($"Producto no encontrado para ID: {changeCartItemDTO.ProductId}");
+            }
+
+            // Verificar si el producto está en el carrito
+            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == changeCartItemDTO.ProductId);
+            if (existingCartItem == null)
+            {
+                Log.Error("El producto ID: {ProductId} no se encuentra en el carrito para buyerId: {BuyerId} y userId: {UserId}", changeCartItemDTO.ProductId, buyerId, userId);
+                throw new Exception($"El producto ID: {changeCartItemDTO.ProductId} no se encuentra en el carrito para buyerId: {buyerId} y userId: {userId}");
+            }
+
+            // Validar que la cantidad no exceda el stock disponible
+            if (product.Stock < changeCartItemDTO.Quantity)
+            {
+                Log.Error("Stock insuficiente para el producto ID: {ProductId}. Stock disponible: {Stock}, cantidad solicitada: {Quantity}", changeCartItemDTO.ProductId, product.Stock, changeCartItemDTO.Quantity);
+                throw new Exception($"Stock insuficiente para el producto ID: {changeCartItemDTO.ProductId}. Stock disponible: {product.Stock}, cantidad solicitada: {changeCartItemDTO.Quantity}");
+            }
+
+            // Actualizar la cantidad del item en el carrito
+            await _cartRepository.UpdateItemQuantityAsync(cart.Id, existingCartItem.Id, changeCartItemDTO.Quantity);
+            Log.Information("Cantidad del producto ID: {ProductId} actualizada en el carrito. Nueva cantidad: {Quantity}", changeCartItemDTO.ProductId, changeCartItemDTO.Quantity);
+
+            // Actualizar el precio total del carrito
+            var totalPrice = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
+            var itemPriceOld = existingCartItem.Quantity * product.Price;
+            var itemPriceNew = changeCartItemDTO.Quantity * product.Price;
+
+            var newTotalPrice = totalPrice - itemPriceOld + itemPriceNew;
+            await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
+            Log.Information("Precio total del carrito actualizado. CartId: {CartId}", cart.Id);
+
+            // Obtener el carrito actualizado
+            cart = await GetCartAsync(buyerId, userId);
+
+            // Mapear el carrito a CartDTO
+            return cart.Adapt<CartDTO>();
+        }
+
     }
 }

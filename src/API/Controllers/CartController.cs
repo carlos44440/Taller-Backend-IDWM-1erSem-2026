@@ -37,6 +37,16 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<CartDTO>("Item agregado al carrito exitosamente", cart));
         }
 
+        [HttpPatch("items")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateItemQuantity([FromBody] AddChangeCartItemDTO changeCartItemDTO)
+        {
+            var buyerId = GetBuyerId();
+            var userId = GetUserId();
+            var cart = await _cartService.UpdateCartItemQuantityAsync(buyerId, changeCartItemDTO, userId);
+            return Ok(new GenericResponse<CartDTO>("Cantidad del item actualizada exitosamente", cart));
+        }
+
         private string GetBuyerId()
         {
             // Intentar obtener el buyerId del contexto HTTP
