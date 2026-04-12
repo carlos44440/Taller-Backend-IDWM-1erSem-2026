@@ -57,6 +57,16 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<CartDTO>("Item removido del carrito exitosamente", cart));
         }
 
+        [HttpPut("clear")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ClearCart()
+        {
+            var buyerId = GetBuyerId();
+            var userId = GetUserId();
+            var cart = await _cartService.ClearCartAsync(buyerId, userId);
+            return Ok(new GenericResponse<CartDTO>("Carrito limpiado exitosamente", cart));
+        }
+
         private string GetBuyerId()
         {
             // Intentar obtener el buyerId del contexto HTTP

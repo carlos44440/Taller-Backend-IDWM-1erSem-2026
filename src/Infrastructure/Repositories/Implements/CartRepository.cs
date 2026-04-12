@@ -68,5 +68,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .Where(ci => ci.Id == cartItemId && ci.CartId == cartId)
                 .ExecuteDeleteAsync() > 0;
         }
+
+        public async Task<bool> ClearCartItemsAsync(int cartId)
+        {
+            return await _context.CartItems
+                .Where(ci => ci.CartId == cartId)
+                .ExecuteDeleteAsync() > 0;
+        }
     }
 }

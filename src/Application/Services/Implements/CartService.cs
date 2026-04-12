@@ -256,6 +256,38 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        public async Task<CartDTO> ClearCartAsync(string buyerId, int? userId = null)
+        {
+            // Obtener el carrito actual
+            var cart = await GetCartAsync(buyerId, userId);
+
+            // Validar que el carrito no esté vacío
+            if (cart.CartItems.Count == 0)
+            {
+                Log.Information("El carrito ya está vacío para buyerId: {BuyerId} y userId: {UserId}", buyerId, userId);
+                return cart.Adapt<CartDTO>();
+            }
+
+            // Eliminar todos los items del carrito
+            var isCleared = await _cartRepository.ClearCartItemsAsync(cart.Id);
+            if (!isCleared)
+            {
+                Log.Error("Error al limpiar el carrito para buyerId: {BuyerId} y userId: {UserId}", buyerId, userId);
+                throw new Exception($"Error al limpiar el carrito para buyerId: {buyerId} y userId: {userId}");
+            }
+            Log.Information("Carrito limpiado. CartId: {CartId}", cart.Id);
+
+            // Actualizar el precio total del carrito a 0
+            var newTotalPrice = 0;
+            await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
+
+            // Obtener el carrito actualizado
+            cart = await GetCartAsync(buyerId, userId);
+
+            // Mapear el carrito a CartDTO
+            return cart.Adapt<CartDTO>();
+        }
+
         private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
         {
             // Crear un nuevo carrito vacío

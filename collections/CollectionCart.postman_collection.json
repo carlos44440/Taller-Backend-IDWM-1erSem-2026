@@ -1,0 +1,2077 @@
+{
+  "info": {
+    "_postman_id": "d2f28540-9db4-422f-be32-37413d770421",
+    "name": "Ayud-Backend-IDWM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37924574",
+    "_collection_link": "https://go.postman.co/collection/37924574-d2f28540-9db4-422f-be32-37413d770421?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Autenticacion",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Name\": \"Carlos Arauco Colque\",\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Rut\": \"24763022-8\",\r\n    \"PhoneNumber\": \"+569 42866608\",\r\n    \"BirthDate\": \"2004-10-01\",\r\n    \"Gender\": \"Otro\",\r\n    \"Password\": \"Carlos123.\",\r\n    \"ConfirmPassword\": \"Carlos123.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}auth/register",
+              "host": [
+                "{{baseurl}}auth"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Carlos Arauco Colque\",\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Rut\": \"24763022-8\",\r\n    \"PhoneNumber\": \"+569 42866608\",\r\n    \"BirthDate\": \"2004-10-01\",\r\n    \"Gender\": \"Otro\",\r\n    \"Password\": \"Carlos123.\",\r\n    \"ConfirmPassword\": \"Carlos123.\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}auth/register",
+                  "host": [
+                    "{{baseurl}}auth"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 01 Apr 2026 01:42:43 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "trace-id",
+                  "value": "ffa7bc1c-c5f9-4a75-8448-07fe0a7df86c"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Conflicto de operación\",\n    \"details\": \"El nombre de usuario ya está registrado.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "EmailVerification",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"VerificationCode\": \"126525\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}auth/email-verification",
+              "host": [
+                "{{baseurl}}auth"
+              ],
+              "path": [
+                "email-verification"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "EmailVerification",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"VerificationCode\": \"649495\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}auth/email-verification",
+                  "host": [
+                    "{{baseurl}}auth"
+                  ],
+                  "path": [
+                    "email-verification"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 22 Mar 2026 22:06:36 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Correo electrónico verificado exitosamente\",\n    \"data\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "ResendVerificationCode",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}auth/resend-verification-code",
+              "host": [
+                "{{baseurl}}auth"
+              ],
+              "path": [
+                "resend-verification-code"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var response = pm.response.json();\r",
+                  "if (pm.response.code === 200 && response.data !== null && response.data !== undefined) {\r",
+                  "    pm.collectionVariables.set(\"token\", response.data);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Email\": \"admin@tiendaucn.cl\",\r\n    \"Password\": \"Admin1234!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}auth/login",
+              "host": [
+                "{{baseurl}}auth"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Email\": \"carlos5132fc@gmail.com\",\r\n    \"Password\": \"Carlos123.\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}auth/login",
+                  "host": [
+                    "{{baseurl}}auth"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 22 Mar 2026 22:07:08 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Inicio de sesión exitoso\",\n    \"data\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImNhcmxvczUxMzJmY0BnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDdXN0b21lciIsImp0aSI6ImFlZGFjNGI3LTQyYjctNDY0MS05OGJiLWRlZmQwYWI5NDM2YiIsImV4cCI6MTc3NDMwMzYyOH0.gFPF214u0ptrYDAbtQTGil7nCOq1O1bW8eot0m-t5cs\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImNhcmxvczUxMzJmY0BnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDdXN0b21lciIsImp0aSI6ImYzMjJlMTM4LTdlNmEtNDc4Yi1hOTQxLTcwMzdmNzg3M2QwOCIsImV4cCI6MTc3NDQ3NTE4MH0.enw_J-dZRl4gi2x6HXqDX5zAuT1wjKuCLJlXh4qdMME",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}auth/logout",
+              "host": [
+                "{{baseurl}}auth"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Logout",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}auth/logout",
+                  "host": [
+                    "{{baseurl}}auth"
+                  ],
+                  "path": [
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 22 Mar 2026 22:07:16 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Logout exitoso.\",\n    \"data\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gestion de Productos",
+      "item": [
+        {
+          "name": "Marcas",
+          "item": [
+            {
+              "name": "CreateBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Motorola\",\r\n    \"Description\": \"Electronicos de USA\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}brand",
+                  "host": [
+                    "{{baseurl}}brand"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "CreateBrand",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"Name\": \"Motorola\",\r\n    \"Description\": \"Electronicos de USA\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}brand",
+                      "host": [
+                        "{{baseurl}}brand"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:25:58 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Marca 'Motorola' creada exitosamente.\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "UpdateBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Description\": \"Marca exclusiva de telefonos\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}brand/9",
+                  "host": [
+                    "{{baseurl}}brand"
+                  ],
+                  "path": [
+                    "9"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "UpdateBrand",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"Description\": \"Marca exclusiva de telefonos\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}brand/9",
+                      "host": [
+                        "{{baseurl}}brand"
+                      ],
+                      "path": [
+                        "9"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:27:24 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Descripción de la marca con ID 9 actualizada exitosamente.\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "DeleteBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"apple\",\r\n    \"Description\": \"Marca exclusiva\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{baseurl}}brand/8",
+                  "host": [
+                    "{{baseurl}}brand"
+                  ],
+                  "path": [
+                    "8"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "DeleteBrand",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"Name\": \"apple\",\r\n    \"Description\": \"Marca exclusiva\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}brand/8",
+                      "host": [
+                        "{{baseurl}}brand"
+                      ],
+                      "path": [
+                        "8"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:27:53 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Marca con ID 8 eliminada exitosamente.\",\n    \"data\": null\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Categorias",
+          "item": [
+            {
+              "name": "CreateCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Electronicos de lujo\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}category",
+                  "host": [
+                    "{{baseurl}}category"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "CreateCategory",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"Name\": \"Electronicos de lujo\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}category",
+                      "host": [
+                        "{{baseurl}}category"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:28:51 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Categoría 'Electronicos de lujo' creada exitosamente.\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "UpdateCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Productos de aseo\",\r\n    \"Description\": \"Productos de limpieza para el hogar\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}category/3",
+                  "host": [
+                    "{{baseurl}}category"
+                  ],
+                  "path": [
+                    "3"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "UpdateCategory",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"Name\": \"Productos de aseo\",\r\n    \"Description\": \"Productos de limpieza para el hogar\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}category/3",
+                      "host": [
+                        "{{baseurl}}category"
+                      ],
+                      "path": [
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:30:31 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Categoría con ID 3 actualizada exitosamente a Nombre: 'Productos de aseo' y Descripción: 'Productos de limpieza para el hogar'.\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "DeleteCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}category/8",
+                  "host": [
+                    "{{baseurl}}category"
+                  ],
+                  "path": [
+                    "8"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "DeleteCategory",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}category/8",
+                      "host": [
+                        "{{baseurl}}category"
+                      ],
+                      "path": [
+                        "8"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:31:28 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Categoría con ID 8 eliminada exitosamente.\",\n    \"data\": null\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Productos",
+          "item": [
+            {
+              "name": "CreateProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "Medias negras",
+                      "type": "text",
+                      "uuid": "6cd74c2c-8480-4bdd-b9de-c6eb44d057dc"
+                    },
+                    {
+                      "key": "Description",
+                      "value": "Medias de algodon",
+                      "type": "text",
+                      "uuid": "fe362b9f-5788-4b96-994d-2401132f46e2"
+                    },
+                    {
+                      "key": "Price",
+                      "value": "6000",
+                      "type": "text",
+                      "uuid": "e749b62a-24a5-4fad-9667-49b37552d6d3"
+                    },
+                    {
+                      "key": "Stock",
+                      "value": "50",
+                      "type": "text",
+                      "uuid": "7eed0085-cda1-4b25-ae50-12acca03b281"
+                    },
+                    {
+                      "key": "CategoryName",
+                      "value": "Ropa",
+                      "type": "text",
+                      "uuid": "01444a26-7ec8-43ca-be68-48a31c2b4c38"
+                    },
+                    {
+                      "key": "BrandName",
+                      "value": "Adidas",
+                      "type": "text",
+                      "uuid": "174f1531-7b6c-44c9-82a1-15c0c59973f0"
+                    },
+                    {
+                      "key": "ImagesFiles",
+                      "type": "file",
+                      "uuid": "27c3a8ed-119f-4de7-9c98-67ced1b5d287",
+                      "src": [
+                        "postman-cloud:///1ef9cb9f-1da8-4ed0-be28-c33d5e742920",
+                        "postman-cloud:///1ef9cb9a-d132-42d0-a20a-8787a801f9da",
+                        "postman-cloud:///1ef9cb98-f72e-4850-b88f-53ac975b9224"
+                      ]
+                    },
+                    {
+                      "key": "",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "e3ba15a2-1675-45db-b74d-9aa216210489",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseurl}}product",
+                  "host": [
+                    "{{baseurl}}product"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "CreateProduct",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "Name",
+                          "value": "Medias negras",
+                          "type": "text",
+                          "uuid": "6cd74c2c-8480-4bdd-b9de-c6eb44d057dc"
+                        },
+                        {
+                          "key": "Description",
+                          "value": "Medias de algodon",
+                          "type": "text",
+                          "uuid": "fe362b9f-5788-4b96-994d-2401132f46e2"
+                        },
+                        {
+                          "key": "Price",
+                          "value": "6000",
+                          "type": "text",
+                          "uuid": "e749b62a-24a5-4fad-9667-49b37552d6d3"
+                        },
+                        {
+                          "key": "Stock",
+                          "value": "50",
+                          "type": "text",
+                          "uuid": "7eed0085-cda1-4b25-ae50-12acca03b281"
+                        },
+                        {
+                          "key": "CategoryName",
+                          "value": "Ropa",
+                          "type": "text",
+                          "uuid": "01444a26-7ec8-43ca-be68-48a31c2b4c38"
+                        },
+                        {
+                          "key": "BrandName",
+                          "value": "Adidas",
+                          "type": "text",
+                          "uuid": "174f1531-7b6c-44c9-82a1-15c0c59973f0"
+                        },
+                        {
+                          "key": "ImagesFiles",
+                          "type": "file",
+                          "uuid": "27c3a8ed-119f-4de7-9c98-67ced1b5d287",
+                          "src": [
+                            "postman-cloud:///1ef9cb9f-1da8-4ed0-be28-c33d5e742920",
+                            "postman-cloud:///1ef9cb9a-d132-42d0-a20a-8787a801f9da",
+                            "postman-cloud:///1ef9cb98-f72e-4850-b88f-53ac975b9224"
+                          ]
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}product",
+                      "host": [
+                        "{{baseurl}}product"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:33:40 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Location",
+                      "value": "api/product/56"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Producto creado exitosamente\",\n    \"data\": \"56\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "SwitchStatus",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \r\n}"
+                },
+                "url": {
+                  "raw": "{{baseurl}}product/switch-status/42",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "switch-status",
+                    "42"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "SwitchStatus",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \r\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}product/switch-status/42",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "switch-status",
+                        "42"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:34:18 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Estado del producto cambiado exitosamente\",\n    \"data\": \"Se cambio el estado a: Inactivo\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "GetProductForAdmin",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}product/admin/55",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "admin",
+                    "55"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetProductForAdmin",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}product/admin/55",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "admin",
+                        "55"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:15:37 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 55,\n        \"name\": \"Readmi Note\",\n        \"description\": \"Telefono celular proveniente de china\",\n        \"price\": \"$900.000\",\n        \"stock\": 50,\n        \"brandName\": \"samsung\",\n        \"brandDescription\": \"1111a\",\n        \"categoryName\": \"Electronica\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005980/product/55/images/GorroNegro_pxckiu.png\"\n        ],\n        \"isActive\": false,\n        \"createdAt\": \"2026-03-30T02:00:59.9531486\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "GetProductForCustomer",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}product/40",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "40"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetProductForCustomer",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}product/40",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "40"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:35:06 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 40,\n        \"name\": \"Generic Steel Fish\",\n        \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n        \"price\": \"$5.881\",\n        \"stockIndicator\": \"Con Stock\",\n        \"brandName\": \"Apple\",\n        \"brandDescription\": null,\n        \"categoryName\": \"Ropa\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://picsum.photos/640/480/?image=591\",\n            \"https://picsum.photos/640/480/?image=802\"\n        ]\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "DeleteProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}product/33",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "33"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "DeleteProduct",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}product/33",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "33"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:35:43 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Producto eliminado exitosamente\",\n    \"data\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "GetProductsForCustomer",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{baseurl}}product?PageNumber=1&PageSize=2&SearchTerm=generic",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "query": [
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "2"
+                    },
+                    {
+                      "key": "SearchTerm",
+                      "value": "generic"
+                    },
+                    {
+                      "key": "cas",
+                      "value": "cac",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetProductsForCustomer",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": []
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}product?PageNumber=1&PageSize=2&SearchTerm=generic",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "query": [
+                        {
+                          "key": "PageNumber",
+                          "value": "1"
+                        },
+                        {
+                          "key": "PageSize",
+                          "value": "2"
+                        },
+                        {
+                          "key": "SearchTerm",
+                          "value": "generic"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:37:44 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 50,\n                \"name\": \"Generic Cotton Towels\",\n                \"description\": \"Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=679\",\n                \"price\": \"$76.316\",\n                \"stockIndicator\": \"Con Stock\"\n            },\n            {\n                \"id\": 40,\n                \"name\": \"Generic Steel Fish\",\n                \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=591\",\n                \"price\": \"$5.881\",\n                \"stockIndicator\": \"Con Stock\"\n            }\n        ],\n        \"totalCount\": 4,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "GetProductsForAdmin",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}product/admin?PageNumber=1&PageSize=2&SearchTerm=readmi note",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "admin"
+                  ],
+                  "query": [
+                    {
+                      "key": "PageNumber",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "2",
+                      "type": "text"
+                    },
+                    {
+                      "key": "SearchTerm",
+                      "value": "readmi note",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetProductsForAdmin",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}product/admin?PageNumber=1&PageSize=2&SearchTerm=readmi note",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "admin"
+                      ],
+                      "query": [
+                        {
+                          "key": "PageNumber",
+                          "value": "1"
+                        },
+                        {
+                          "key": "PageSize",
+                          "value": "2"
+                        },
+                        {
+                          "key": "SearchTerm",
+                          "value": "readmi note"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:41:03 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 55,\n                \"name\": \"Readmi Note\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n                \"price\": \"$900.000\",\n                \"stock\": 50,\n                \"available\": \"Inactivo\"\n            },\n            {\n                \"id\": 54,\n                \"name\": \"Readmi Note 10\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1774820187/product/54/images/gorra_rm7tbp.jpg\",\n                \"price\": \"$900.000\",\n                \"stock\": 50,\n                \"available\": \"Activo\"\n            }\n        ],\n        \"totalCount\": 3,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "UpdateProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjY1NGY4MTMzLTRlMjMtNDc0ZC1iNjkxLWIzNzUyNmFlOGZlMSIsImV4cCI6MTc3NTA4MTE1MH0.nxii68tMtIDtHo5VGNFG-plj_vwfaaw1llMtlWF_S_w",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "Readmi Note",
+                      "type": "text",
+                      "uuid": "17837fe3-ebbd-4609-b22e-71e2a2af0dc9"
+                    },
+                    {
+                      "key": "Description",
+                      "value": "Telefono celular proveniente de china",
+                      "type": "text",
+                      "uuid": "0e952cc6-d028-4af0-9e01-6d15a928279d"
+                    },
+                    {
+                      "key": "Price",
+                      "value": "900000",
+                      "type": "text",
+                      "uuid": "6a4c5708-959e-441d-b2d3-d104a30dae98"
+                    },
+                    {
+                      "key": "Stock",
+                      "value": "50",
+                      "type": "text",
+                      "uuid": "3d6c66fe-0309-4f8c-af3c-94150d69cbb1"
+                    },
+                    {
+                      "key": "CategoryName",
+                      "value": "Electronica",
+                      "type": "text",
+                      "uuid": "835d8880-8520-429d-a4ec-6f05d8aa6057"
+                    },
+                    {
+                      "key": "BrandName",
+                      "value": "samsung",
+                      "type": "text",
+                      "uuid": "de59a24b-3afe-42d2-a2f3-290da6498e95"
+                    },
+                    {
+                      "key": "ImagesToRemove",
+                      "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1774836062/product/55/images/gorra_cj8kl9.jpg",
+                      "type": "text",
+                      "uuid": "7bfedd0e-9afa-4b05-bdce-b0eccdda7543"
+                    },
+                    {
+                      "key": "ImagesToRemove",
+                      "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg",
+                      "type": "text",
+                      "uuid": "3aece9ae-4beb-43c1-9388-f89c290a3376",
+                      "disabled": true
+                    },
+                    {
+                      "key": "ImagesToAdd",
+                      "type": "file",
+                      "uuid": "581992b2-fa1c-43a5-ae12-4c741e4cb8db",
+                      "src": [
+                        "postman-cloud:///1ef9cb9f-1da8-4ed0-be28-c33d5e742920",
+                        "postman-cloud:///1ef9cb9a-d132-42d0-a20a-8787a801f9da"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseurl}}product/55",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "55"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "UpdateProduct",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "Name",
+                          "value": "Readmi Note",
+                          "type": "text",
+                          "uuid": "17837fe3-ebbd-4609-b22e-71e2a2af0dc9"
+                        },
+                        {
+                          "key": "Description",
+                          "value": "Telefono celular proveniente de china",
+                          "type": "text",
+                          "uuid": "0e952cc6-d028-4af0-9e01-6d15a928279d"
+                        },
+                        {
+                          "key": "Price",
+                          "value": "900000",
+                          "type": "text",
+                          "uuid": "6a4c5708-959e-441d-b2d3-d104a30dae98"
+                        },
+                        {
+                          "key": "Stock",
+                          "value": "50",
+                          "type": "text",
+                          "uuid": "3d6c66fe-0309-4f8c-af3c-94150d69cbb1"
+                        },
+                        {
+                          "key": "CategoryName",
+                          "value": "Electronica",
+                          "type": "text",
+                          "uuid": "835d8880-8520-429d-a4ec-6f05d8aa6057"
+                        },
+                        {
+                          "key": "BrandName",
+                          "value": "samsung",
+                          "type": "text",
+                          "uuid": "de59a24b-3afe-42d2-a2f3-290da6498e95"
+                        },
+                        {
+                          "key": "ImagesToRemove",
+                          "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1774836062/product/55/images/gorra_cj8kl9.jpg",
+                          "type": "text",
+                          "uuid": "7bfedd0e-9afa-4b05-bdce-b0eccdda7543"
+                        },
+                        {
+                          "key": "ImagesToRemove",
+                          "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg",
+                          "type": "text",
+                          "uuid": "3aece9ae-4beb-43c1-9388-f89c290a3376",
+                          "disabled": true
+                        },
+                        {
+                          "key": "ImagesToAdd",
+                          "type": "file",
+                          "uuid": "581992b2-fa1c-43a5-ae12-4c741e4cb8db",
+                          "src": [
+                            "postman-cloud:///1ef9cb9f-1da8-4ed0-be28-c33d5e742920",
+                            "postman-cloud:///1ef9cb9a-d132-42d0-a20a-8787a801f9da"
+                          ]
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseurl}}product/55",
+                      "host": [
+                        "{{baseurl}}product"
+                      ],
+                      "path": [
+                        "55"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 01 Apr 2026 01:41:28 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Kestrel"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Producto actualizado exitosamente\",\n    \"data\": null\n}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Carrito",
+      "item": [
+        {
+          "name": "GetCart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}cart",
+              "host": [
+                "{{baseurl}}cart"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "GetCart",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}cart",
+                  "host": [
+                    "{{baseurl}}cart"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 01:04:19 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "BuyerId=019d7a0b-fd6c-7709-a71a-0768f6b9ea0c; expires=Tue, 12 May 2026 01:04:20 GMT; path=/; secure; samesite=lax; httponly"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Carrito obtenido exitosamente\",\n    \"data\": {\n        \"buyerId\": \"019d7a0b-fd6c-7709-a71a-0768f6b9ea0c\",\n        \"userId\": null,\n        \"items\": null,\n        \"totalPrice\": \"0\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "AddCartItem",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": 1,\r\n    \"Quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}cart/items",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "AddCartItem",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ProductId\": 2,\r\n    \"Quantity\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}cart/items",
+                  "host": [
+                    "{{baseurl}}cart"
+                  ],
+                  "path": [
+                    "items"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 02:05:51 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "BuyerId=019d7a0b-fd6c-7709-a71a-0768f6b9ea0c; expires=Tue, 12 May 2026 02:05:51 GMT; path=/; secure; samesite=lax; httponly"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Item agregado al carrito exitosamente\",\n    \"data\": {\n        \"buyerId\": \"019d7a0b-fd6c-7709-a71a-0768f6b9ea0c\",\n        \"userId\": 1,\n        \"items\": [\n            {\n                \"productId\": 2,\n                \"productName\": \"Unbranded Rubber Shirt\",\n                \"productImageUrl\": \"https://picsum.photos/640/480/?image=658\",\n                \"productPrice\": \"$76.305\",\n                \"quantity\": 1,\n                \"totalPrice\": \"$76.305\"\n            }\n        ],\n        \"totalPrice\": \"$76.305\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "UpdateItemQuantity",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": 1,\r\n    \"Quantity\": 10\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}cart/items",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "UpdateItemQuantity",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ProductId\": 1,\r\n    \"Quantity\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}cart/items",
+                  "host": [
+                    "{{baseurl}}cart"
+                  ],
+                  "path": [
+                    "items"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 02:38:35 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "BuyerId=019d7a0b-fd6c-7709-a71a-0768f6b9ea0c; expires=Tue, 12 May 2026 02:38:35 GMT; path=/; secure; samesite=lax; httponly"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Cantidad del item actualizada exitosamente\",\n    \"data\": {\n        \"buyerId\": \"019d7a0b-fd6c-7709-a71a-0768f6b9ea0c\",\n        \"userId\": null,\n        \"items\": [\n            {\n                \"productId\": 1,\n                \"productName\": \"Fantastic Cotton Chicken\",\n                \"productImageUrl\": \"https://picsum.photos/640/480/?image=554\",\n                \"productPrice\": \"$51.666\",\n                \"quantity\": 10,\n                \"totalPrice\": \"$516.660\"\n            },\n            {\n                \"productId\": 2,\n                \"productName\": \"Unbranded Rubber Shirt\",\n                \"productImageUrl\": \"https://picsum.photos/640/480/?image=658\",\n                \"productPrice\": \"$76.305\",\n                \"quantity\": 1,\n                \"totalPrice\": \"$76.305\"\n            }\n        ],\n        \"totalPrice\": \"$592.965\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "RemoveItem",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjNmZTU3MmNiLTI4MTUtNDRlNi05ZDhmLWZmNTJjODVjODQ3ZCIsImV4cCI6MTc3NjAwMjc5OX0.sCLrfdoy-fjDlrJfuNpPD2l0zw8GscrTYhEH7ErkkjU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}cart/items/2",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "items",
+                "2"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "RemoveItem",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}cart/items/2",
+                  "host": [
+                    "{{baseurl}}cart"
+                  ],
+                  "path": [
+                    "items",
+                    "2"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 03:07:19 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "BuyerId=019d7a0b-fd6c-7709-a71a-0768f6b9ea0c; expires=Tue, 12 May 2026 03:07:18 GMT; path=/; secure; samesite=lax; httponly"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Item removido del carrito exitosamente\",\n    \"data\": {\n        \"buyerId\": \"019d7a0b-fd6c-7709-a71a-0768f6b9ea0c\",\n        \"userId\": 1,\n        \"items\": [],\n        \"totalPrice\": \"$0\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "ClearCart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkB0aWVuZGF1Y24uY2wiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6IjNmZTU3MmNiLTI4MTUtNDRlNi05ZDhmLWZmNTJjODVjODQ3ZCIsImV4cCI6MTc3NjAwMjc5OX0.sCLrfdoy-fjDlrJfuNpPD2l0zw8GscrTYhEH7ErkkjU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}cart/clear",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "clear"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "ClearCart",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}cart/clear",
+                  "host": [
+                    "{{baseurl}}cart"
+                  ],
+                  "path": [
+                    "clear"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 03:33:14 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Kestrel"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "BuyerId=019d7a0b-fd6c-7709-a71a-0768f6b9ea0c; expires=Tue, 12 May 2026 03:33:14 GMT; path=/; secure; samesite=lax; httponly"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Carrito limpiado exitosamente\",\n    \"data\": {\n        \"buyerId\": \"019d7a0b-fd6c-7709-a71a-0768f6b9ea0c\",\n        \"userId\": 1,\n        \"items\": [],\n        \"totalPrice\": \"$0\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseurl",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
