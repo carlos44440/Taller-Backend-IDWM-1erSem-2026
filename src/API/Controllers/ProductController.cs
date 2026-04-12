@@ -27,7 +27,7 @@ namespace TiendaUCN.src.API.Controllers
         }
 
         [HttpPatch("switch-status/{id}")]
-        public async Task<IActionResult> SwitchStatusProductAsync([FromRoute] int id)
+        public async Task<IActionResult> SwitchStatusProduct([FromRoute] int id)
         {
             var result = await _productService.SwitchStatusProductAsync(id);
             return Ok(new GenericResponse<string>("Estado del producto cambiado exitosamente", result));
@@ -35,21 +35,21 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProductByIdForCustomerAsync([FromRoute] int id)
+        public async Task<IActionResult> GetProductByIdForCustomer([FromRoute] int id)
         {
             var result = await _productService.GetProductByIdForCustomerAsync(id);
             return Ok(new GenericResponse<ProductDetailCustomerDTO>("Producto encontrado exitosamente", result));
         }
 
         [HttpGet("admin/{id}")]
-        public async Task<IActionResult> GetProductByIdForAdminAsync([FromRoute] int id)
+        public async Task<IActionResult> GetProductByIdForAdmin([FromRoute] int id)
         {
             var result = await _productService.GetProductByIdForAdminAsync(id);
             return Ok(new GenericResponse<ProductDetailAdminDTO>("Producto encontrado exitosamente", result));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductAsync([FromRoute] int id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {
             await _productService.DeleteProductAsync(id);
             return Ok(new GenericResponse<string>("Producto eliminado exitosamente", null));
@@ -57,21 +57,21 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ListProductsForCustomerAsync([FromQuery] SearchParamsDTO searchParams)
+        public async Task<IActionResult> ListProductsForCustomer([FromQuery] SearchParamsDTO searchParams)
         {
             var result = await _productService.GetListedProductsForCustomerAsync(searchParams);
             return Ok(new GenericResponse<ListedProductsForCustomerDTO>("Productos encontrados exitosamente", result));
         }
 
         [HttpGet("admin")]
-        public async Task<IActionResult> ListProductsForAdminAsync([FromQuery] SearchParamsDTO searchParams)
+        public async Task<IActionResult> ListProductsForAdmin([FromQuery] SearchParamsDTO searchParams)
         {
             var result = await _productService.GetListedProductsForAdminAsync(searchParams);
             return Ok(new GenericResponse<ListedProductsForAdminDTO>("Productos encontrados exitosamente", result));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProductAsync([FromRoute] int id, [FromForm] UpdateProductDTO updateProductDTO)
+        public async Task<IActionResult> UpdateProduct([FromRoute] int id, [FromForm] UpdateProductDTO updateProductDTO)
         {
             await _productService.UpdateProductAsync(id, updateProductDTO);
             return Ok(new GenericResponse<string>("Producto actualizado exitosamente", null));
