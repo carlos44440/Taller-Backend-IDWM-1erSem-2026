@@ -91,27 +91,6 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart!.Adapt<CartDTO>();
         }
 
-        private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
-        {
-            // Crear un nuevo carrito vacío
-            var newCart = new Cart
-            {
-                BuyerId = buyerId,
-                UserId = userId,
-            };
-
-            // Guardar el nuevo carrito en la base de datos
-            var isCreated = await _cartRepository.CreateAsync(newCart);
-            if (!isCreated)
-            {
-                Log.Error("Error al crear un nuevo carrito para buyerId: {BuyerId} y userId: {UserId}.", buyerId, userId);
-                throw new Exception($"Error al crear un nuevo carrito para buyerId: {buyerId} y userId: {userId}.");
-            }
-
-            Log.Information("Nuevo carrito creado para buyerId: {BuyerId}, userId: {UserId}", buyerId, userId);
-            return newCart.Id;
-        }
-
         public async Task<CartDTO> AddCartItemAsync(string buyerId, AddChangeCartItemDTO addCartItemDTO, int? userId = null)
         {
             // Inicializar el carrito como null
@@ -182,34 +161,6 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
-        private async Task<Cart> GetCartAsync(string buyerId, int? userId)
-        {
-            Cart? cart;
-
-            // Buscar el carrito por userId
-            if (userId.HasValue)
-            {
-                cart = await _cartRepository.GetByUserIdAsync(userId.Value);
-                if (cart == null)
-                {
-                    Log.Information("No se encontró un carrito para userId: {UserId}", userId.Value);
-                    throw new Exception($"No se encontró un carrito para userId: {userId.Value}.");
-                }
-            }
-            // Buscar el carrito por buyerId
-            else
-            {
-                cart = await _cartRepository.GetByBuyerIdAsync(buyerId);
-                if (cart == null)
-                {
-                    Log.Information("No se encontró un carrito para buyerId: {BuyerId}", buyerId);
-                    throw new Exception($"No se encontró un carrito para buyerId: {buyerId}.");
-                }
-            }
-
-            return cart;
-        }
-
         public async Task<CartDTO> UpdateCartItemQuantityAsync(string buyerId, AddChangeCartItemDTO changeCartItemDTO, int? userId = null)
         {
             // Obtener el carrito actual
@@ -260,5 +211,98 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        public async Task<CartDTO> RemoveCartItemAsync(string buyerId, int productId, int? userId = null)
+        {
+            // Obtener el carrito actual
+            var cart = await GetCartAsync(buyerId, userId);
+
+            // Validar que el producto exista
+            var existingProduct = await _productRepository.ExistsByIdCustomerAsync(productId);
+            if (!existingProduct)
+            {
+                Log.Error("Producto no encontrado para ID: {ProductId}", productId);
+                throw new Exception($"Producto no encontrado para ID: {productId}");
+            }
+
+            // Verificar si el producto está en el carrito
+            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+            if (existingCartItem == null)
+            {
+                Log.Error("El producto ID: {ProductId} no se encuentra en el carrito para buyerId: {BuyerId} y userId: {UserId}", productId, buyerId, userId);
+                throw new Exception($"El producto ID: {productId} no se encuentra en el carrito para buyerId: {buyerId} y userId: {userId}");
+            }
+
+            // Eliminar el item del carrito
+            var isRemoved = await _cartRepository.RemoveItemAsync(cart.Id, existingCartItem.Id);
+            if (!isRemoved)
+            {
+                Log.Error("Error al remover el producto ID: {ProductId} del carrito para buyerId: {BuyerId} y userId: {UserId}", productId, buyerId, userId);
+                throw new Exception($"Error al remover el producto ID: {productId} del carrito para buyerId: {buyerId} y userId: {userId}");
+            }
+            Log.Information("Producto ID: {ProductId} removido del carrito. CartId: {CartId}", productId, cart.Id);
+
+            // Actualizar el precio total del carrito
+            var totalPrice = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
+            var itemRemovedPrice = existingCartItem.Quantity * existingCartItem.Product.Price;
+
+            var newTotalPrice = totalPrice - itemRemovedPrice;
+            await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
+            Log.Information("Precio total del carrito actualizado. CartId: {CartId}", cart.Id);
+
+            // Obtener el carrito actualizado
+            cart = await GetCartAsync(buyerId, userId);
+
+            // Mapear el carrito a CartDTO
+            return cart.Adapt<CartDTO>();
+        }
+
+        private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
+        {
+            // Crear un nuevo carrito vacío
+            var newCart = new Cart
+            {
+                BuyerId = buyerId,
+                UserId = userId,
+            };
+
+            // Guardar el nuevo carrito en la base de datos
+            var isCreated = await _cartRepository.CreateAsync(newCart);
+            if (!isCreated)
+            {
+                Log.Error("Error al crear un nuevo carrito para buyerId: {BuyerId} y userId: {UserId}.", buyerId, userId);
+                throw new Exception($"Error al crear un nuevo carrito para buyerId: {buyerId} y userId: {userId}.");
+            }
+
+            Log.Information("Nuevo carrito creado para buyerId: {BuyerId}, userId: {UserId}", buyerId, userId);
+            return newCart.Id;
+        }
+
+        private async Task<Cart> GetCartAsync(string buyerId, int? userId)
+        {
+            Cart? cart;
+
+            // Buscar el carrito por userId
+            if (userId.HasValue)
+            {
+                cart = await _cartRepository.GetByUserIdAsync(userId.Value);
+                if (cart == null)
+                {
+                    Log.Information("No se encontró un carrito para userId: {UserId}", userId.Value);
+                    throw new Exception($"No se encontró un carrito para userId: {userId.Value}.");
+                }
+            }
+            // Buscar el carrito por buyerId
+            else
+            {
+                cart = await _cartRepository.GetByBuyerIdAsync(buyerId);
+                if (cart == null)
+                {
+                    Log.Information("No se encontró un carrito para buyerId: {BuyerId}", buyerId);
+                    throw new Exception($"No se encontró un carrito para buyerId: {buyerId}.");
+                }
+            }
+
+            return cart;
+        }
     }
 }

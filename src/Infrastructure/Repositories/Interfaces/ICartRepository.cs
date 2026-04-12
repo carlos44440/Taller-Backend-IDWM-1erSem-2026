@@ -10,5 +10,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<bool> AddItemAsync(CartItem cartItem);
         Task UpdateItemQuantityAsync(int cartId, int cartItemId, int newQuantity);
         Task UpdateTotalPriceAsync(int cartId, int newTotalPrice);
+        Task<bool> RemoveItemAsync(int cartId, int cartItemId);
     }
 }
