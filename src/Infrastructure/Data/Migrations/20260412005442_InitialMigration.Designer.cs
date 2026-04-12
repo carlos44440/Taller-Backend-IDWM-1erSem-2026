@@ -11,7 +11,7 @@ using TiendaUCN.src.Infrastructure.Data;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260328212026_InitialMigration")]
+    [Migration("20260412005442_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -65,13 +65,14 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("BuyerId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TotalPrice")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -89,9 +90,6 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CartId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
@@ -248,6 +246,7 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
@@ -379,9 +378,7 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                 {
                     b.HasOne("TiendaUCN.src.Domain.Models.User", "User")
                         .WithOne("Cart")
-                        .HasForeignKey("TiendaUCN.src.Domain.Models.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TiendaUCN.src.Domain.Models.Cart", "UserId");
 
                     b.Navigation("User");
                 });
