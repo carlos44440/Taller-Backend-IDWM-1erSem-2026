@@ -7,6 +7,6 @@ namespace TiendaUCN.src.Domain.Models
         public string BuyerId { get; set; } = null!; // Id asociada a un usuario no autenticado
         public int? UserId { get; set; } // Establece la relación con User (Un usuario tiene un carrito)
         public User User { get; set; } = null!;
-        public List<CartItem> CartItems { get; } = new List<CartItem>(); // Relación con CartItem (Un carrito puede tener muchos CartItems)
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>(); // Relación con CartItem (Un carrito puede tener muchos CartItems)
     }
 }
