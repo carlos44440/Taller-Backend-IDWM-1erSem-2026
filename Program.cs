@@ -29,6 +29,7 @@ builder.Services.AddControllers();
 // Configuración de mapeadores
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<ProductMapper>();
+builder.Services.AddScoped<CartMapper>();
 
 // Configuración de servicios y repositorios
 builder.Services.AddScoped<IUserService, UserService>();

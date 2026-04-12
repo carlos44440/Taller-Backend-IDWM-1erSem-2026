@@ -117,22 +117,8 @@ namespace TiendaUCN.src.Application.Services.Implements
             // Inicializar el carrito como null
             Cart? cart = null;
 
-            // Obtener el carrito
-            if (userId.HasValue)
-            {
-                cart = await _cartRepository.GetByUserIdAsync(userId.Value);
-            }
-            else
-            {
-                cart = await _cartRepository.GetByBuyerIdAsync(buyerId);
-            }
-
-            // Validar que el carrito exista
-            if (cart == null)
-            {
-                Log.Error("Carrito no encontrado para buyerId: {BuyerId} y userId: {UserId}", buyerId, userId);
-                throw new Exception($"Carrito no encontrado para buyerId: {buyerId} y userId: {userId}");
-            }
+            // Obtener el carrito actual
+            cart = await GetCartAsync(buyerId, userId);
 
             // Obtener el producto
             var product = await _productRepository.GetProductByIdForCustomerAsync(addCartItemDTO.ProductId);
@@ -144,21 +130,25 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new Exception($"Producto no encontrado para ID: {addCartItemDTO.ProductId}");
             }
 
+            // Verificar si el producto ya está en el carrito
+            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == addCartItemDTO.ProductId);
+
+            // Calcular la cantidad total (cantidad actual en el carrito + cantidad a agregar)
+            var totalRequestedQuantity = addCartItemDTO.Quantity + (existingCartItem?.Quantity ?? 0);
+
             // Validar que la cantidad no exceda el stock disponible
-            if (product.Stock < addCartItemDTO.Quantity)
+            if (product.Stock < totalRequestedQuantity)
             {
-                Log.Error("Stock insuficiente para el producto ID: {ProductId}. Stock disponible: {Stock}, cantidad solicitada: {Quantity}", addCartItemDTO.ProductId, product.Stock, addCartItemDTO.Quantity);
-                throw new Exception($"Stock insuficiente para el producto ID: {addCartItemDTO.ProductId}. Stock disponible: {product.Stock}, cantidad solicitada: {addCartItemDTO.Quantity}");
+                Log.Error("Stock insuficiente para el producto ID: {ProductId}. Stock disponible: {Stock}, cantidad solicitada: {Quantity}", addCartItemDTO.ProductId, product.Stock, totalRequestedQuantity);
+                throw new Exception($"Stock insuficiente para el producto ID: {addCartItemDTO.ProductId}. Stock disponible: {product.Stock}, cantidad solicitada: {totalRequestedQuantity}");
             }
 
             // Verificar si el producto ya está en el carrito
-            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == addCartItemDTO.ProductId);
             if (existingCartItem != null)
             {
-                // Si el producto ya está en el carrito, sumar la cantidad solicitada a la cantidad existente
-                var newQuantity = existingCartItem.Quantity + addCartItemDTO.Quantity;
-                await _cartRepository.UpdateItemQuantityAsync(cart.Id, existingCartItem.Id, newQuantity);
-                Log.Information("Cantidad del producto ID: {ProductId} actualizada en el carrito. Nueva cantidad: {Quantity}", addCartItemDTO.ProductId, newQuantity);
+                // Actualizar la cantidad del item existente
+                await _cartRepository.UpdateItemQuantityAsync(cart.Id, existingCartItem.Id, totalRequestedQuantity);
+                Log.Information("Cantidad del producto ID: {ProductId} actualizada en el carrito. Nueva cantidad: {Quantity}", addCartItemDTO.ProductId, totalRequestedQuantity);
             }
             else
             {
@@ -170,7 +160,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                     CartId = cart.Id
                 };
 
-                var isAdded = await _cartRepository.AddItemAsync(cart, newCartItem);
+                var isAdded = await _cartRepository.AddItemAsync(newCartItem);
                 if (!isAdded)
                 {
                     Log.Error("Error al agregar el producto ID: {ProductId} al carrito para buyerId: {BuyerId} y userId: {UserId}", addCartItemDTO.ProductId, buyerId, userId);
@@ -179,12 +169,45 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             // Actualizar el precio total del carrito
-            var newTotalPrice = cart.TotalPrice + (product.Price * addCartItemDTO.Quantity);
+            var totalPrice = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
+
+            var newTotalPrice = totalPrice + (product.Price * addCartItemDTO.Quantity);
             await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
             Log.Information("Precio total del carrito actualizado. CartId: {CartId}", cart.Id);
 
+            // Obtener el carrito actualizado
+            cart = await GetCartAsync(buyerId, userId);
+
             // Mapear el carrito a CartDTO
             return cart.Adapt<CartDTO>();
+        }
+
+        private async Task<Cart> GetCartAsync(string buyerId, int? userId)
+        {
+            Cart? cart;
+
+            // Buscar el carrito por userId
+            if (userId.HasValue)
+            {
+                cart = await _cartRepository.GetByUserIdAsync(userId.Value);
+                if (cart == null)
+                {
+                    Log.Information("No se encontró un carrito para userId: {UserId}", userId.Value);
+                    throw new Exception($"No se encontró un carrito para userId: {userId.Value}.");
+                }
+            }
+            // Buscar el carrito por buyerId
+            else
+            {
+                cart = await _cartRepository.GetByBuyerIdAsync(buyerId);
+                if (cart == null)
+                {
+                    Log.Information("No se encontró un carrito para buyerId: {BuyerId}", buyerId);
+                    throw new Exception($"No se encontró un carrito para buyerId: {buyerId}.");
+                }
+            }
+
+            return cart;
         }
     }
 }

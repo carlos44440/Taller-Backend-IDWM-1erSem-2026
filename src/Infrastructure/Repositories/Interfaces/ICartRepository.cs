@@ -6,9 +6,8 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
     {
         Task<Cart?> GetByUserIdAsync(int userId);
         Task<Cart?> GetByBuyerIdAsync(string buyerId);
-        Task<Cart?> CreateToUserByBuyerCartAsync(Cart buyerCart, int userId);
         Task<bool> CreateAsync(Cart cart);
-        Task<bool> AddItemAsync(Cart cart, CartItem cartItem);
+        Task<bool> AddItemAsync(CartItem cartItem);
         Task UpdateItemQuantityAsync(int cartId, int cartItemId, int newQuantity);
         Task UpdateTotalPriceAsync(int cartId, int newTotalPrice);
     }

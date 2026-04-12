@@ -15,43 +15,23 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 
         public async Task<Cart?> GetByUserIdAsync(int userId)
         {
-            return await _context.Carts.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product)
-                                                .ThenInclude(p => p.Images)
-                                        .FirstOrDefaultAsync(c => c.UserId == userId);
+            return await _context.Carts
+                .AsNoTracking() // Solo lectura, no guarda el cart en cache
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.Images)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
         public async Task<Cart?> GetByBuyerIdAsync(string buyerId)
         {
             // Retornar el carrito exclusivo para el navegador
-            return await _context.Carts.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product)
-                                                .ThenInclude(p => p.Images)
-                                        .FirstOrDefaultAsync(c => c.BuyerId == buyerId && c.UserId == null);
-        }
-
-        public async Task<Cart?> CreateToUserByBuyerCartAsync(Cart buyerCart, int userId)
-        {
-            // Crear un nuevo carrito para el usuario autenticado basado en el carrito encontrado por buyerId
-            var newCart = new Cart
-            {
-                BuyerId = buyerCart.BuyerId,
-                UserId = userId,
-                TotalPrice = buyerCart.TotalPrice,
-                CartItems = buyerCart.CartItems.Select(ci => new CartItem
-                {
-                    ProductId = ci.ProductId,
-                    Quantity = ci.Quantity,
-                }).ToList()
-            };
-
-            _context.Carts.Add(newCart);
-            await _context.SaveChangesAsync();
-
-            return await _context.Carts.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product)
-                                                .ThenInclude(p => p.Images)
-                                        .FirstOrDefaultAsync(c => c.Id == newCart.Id);
+            return await _context.Carts
+                .AsNoTracking() // Solo lectura, no guarda el cart en cache
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                        .ThenInclude(p => p.Images)
+                .FirstOrDefaultAsync(c => c.BuyerId == buyerId && c.UserId == null);
         }
 
         public async Task<bool> CreateAsync(Cart cart)
@@ -60,9 +40,9 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> AddItemAsync(Cart cart, CartItem cartItem)
+        public async Task<bool> AddItemAsync(CartItem cartItem)
         {
-            cart.CartItems.Add(cartItem);
+            _context.CartItems.Add(cartItem);
             return await _context.SaveChangesAsync() > 0;
         }
 
