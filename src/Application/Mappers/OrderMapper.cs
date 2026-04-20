@@ -25,7 +25,7 @@ namespace TiendaUCN.src.Application.Mappers
         private void ConfigureOrderMappings()
         {
             TypeAdapterConfig<Cart, Order>.NewConfig()
-                .Map(dest => dest.OrderItems, src => src.CartItems.Adapt<List<OrderItem>>())
+                .Map(dest => dest.OrderItems, src => src.CartItems.Select(i => i.Adapt<OrderItem>()).ToList())
                 .Ignore(dest => dest.Id);
         }
 

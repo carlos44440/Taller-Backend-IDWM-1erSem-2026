@@ -349,9 +349,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 cart = await _cartRepository.GetByUserIdAsync(userId);
 
                 // Actualizar el precio total del carrito
-                var totalPrice = cart!.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
-                var priceToReduce = itemsToUpdate.Sum(i => (i.item.Quantity - i.newQuantity) * i.item.Product.Price);
-                var newTotalPrice = totalPrice - priceToReduce;
+                var newTotalPrice = cart!.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
                 await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
                 Log.Information("Precio total actualizado. CartId: {CartId}", cart.Id);
 
@@ -374,6 +372,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             };
             return checkoutResult;
         }
+
         private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
         {
             // Crear un nuevo carrito vacío
