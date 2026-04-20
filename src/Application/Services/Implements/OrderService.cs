@@ -1,5 +1,7 @@
 using Mapster;
 using Serilog;
+using TiendaUCN.src.Application.DTOs.OrderDTO;
+using TiendaUCN.src.Application.DTOs.ProductDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
@@ -69,6 +71,52 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             // Retornar el código de la orden creada
             return code;
+        }
+
+        public async Task<OrderDetailDTO> GetOrderDetailAsync(string orderCode, int userId)
+        {
+            // Obtener la orden por su código
+            var order = await _orderRepository.GetByCodeAsync(orderCode, userId)
+                ?? throw new InvalidOperationException("No se encontró una orden con el código proporcionado para el usuario.");
+
+            // Mapear la orden a un DTO y retornarlo
+            return order.Adapt<OrderDetailDTO>();
+        }
+
+        public async Task<ListedOrderDetailDTO> GetOrdersByUserIdAsync(SearchParamsDTO searchParams, int userId)
+        {
+            // Obtener las orders filtrados y el total de orders que cumplen con el filtro
+            var (orders, totalCount) = await _orderRepository.GetFilteredForUserIdAsync(searchParams, userId);
+
+            if (totalCount == 0)
+            {
+                Log.Information("No se encontraron productos que cumplan con los criterios de búsqueda para el customer. Filtros: {@SearchParams}", searchParams);
+                throw new KeyNotFoundException("No se encontraron productos que cumplan con los criterios de búsqueda.");
+            }
+
+            var totalPages = (int)Math.Ceiling((double)totalCount / searchParams.PageSize);
+            var ordersInPage = orders.Count();
+
+            // Validar que la página solicitada no exceda el total de páginas disponibles
+            if (searchParams.PageNumber > totalPages)
+            {
+                Log.Information("No se encontraron productos en la página solicitada para el customer. Filtros: {@SearchParams}", searchParams);
+                throw new ArgumentOutOfRangeException($"La página {searchParams.PageNumber} no existe. Total: {totalPages}.");
+            }
+
+            // Mapear las órdenes a un DTO de listado
+            var listedOrders = new ListedOrderDetailDTO
+            {
+                Orders = orders.Adapt<List<OrderDetailDTO>>(),
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = searchParams.PageNumber,
+                PageSize = searchParams.PageSize,
+                OrdersInPage = ordersInPage
+            };
+
+            // Retornar el DTO
+            return listedOrders;
         }
 
         private async Task<string> GenerateOrderCodeAsync()

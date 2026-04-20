@@ -4,7 +4,7 @@ namespace TiendaUCN.src.Domain.Models
     {
         public int Id { get; set; }
         public required string Code { get; set; }
-        public DateTime TransactionDate { get; set; } = DateTime.Now;
+        public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
         public required int TotalPrice { get; set; }
         public int UserId { get; set; } // Establece la relación con User (Un usuario puede tener muchos pedidos)
         public User User { get; set; } = null!;

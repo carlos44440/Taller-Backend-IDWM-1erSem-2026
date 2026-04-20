@@ -11,7 +11,7 @@ using TiendaUCN.src.Infrastructure.Data;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260420050211_firstMigration")]
+    [Migration("20260420191118_firstMigration")]
     partial class firstMigration
     {
         /// <inheritdoc />

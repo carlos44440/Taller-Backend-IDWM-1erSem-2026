@@ -1,4 +1,5 @@
 using Mapster;
+using TiendaUCN.src.Application.DTOs.OrderDTO;
 using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Application.Mappers
@@ -27,6 +28,11 @@ namespace TiendaUCN.src.Application.Mappers
             TypeAdapterConfig<Cart, Order>.NewConfig()
                 .Map(dest => dest.OrderItems, src => src.CartItems.Select(i => i.Adapt<OrderItem>()).ToList())
                 .Ignore(dest => dest.Id);
+
+            TypeAdapterConfig<Order, OrderDetailDTO>.NewConfig()
+                .Map(dest => dest.TransactionDate, src => TimeZoneInfo.ConvertTimeFromUtc(src.TransactionDate, _timeZoneInfo))
+                .Map(dest => dest.TotalPrice, src => src.TotalPrice.ToString("C"))
+                .Map(dest => dest.Items, src => src.OrderItems.Select(i => i.Adapt<OrderItemDTO>()).ToList());
         }
 
         private void ConfigureOrderItemsMappings()
@@ -38,6 +44,13 @@ namespace TiendaUCN.src.Application.Mappers
                 .Map(dest => dest.ImageUrlAtMoment, src => src.Product.Images != null && src.Product.Images.Any() ? src.Product.Images.First().ImageUrl : _defaultImageUrl)
                 .Map(dest => dest.SubtotalPrice, src => src.Quantity * src.Product.Price)
                 .Ignore(dest => dest.Id);
+
+            TypeAdapterConfig<OrderItem, OrderItemDTO>.NewConfig()
+                .Map(dest => dest.ProductName, src => src.NameAtMoment)
+                .Map(dest => dest.ProductDescription, src => src.DescriptionAtMoment)
+                .Map(dest => dest.MainImageURL, src => src.ImageUrlAtMoment)
+                .Map(dest => dest.UnitPriceAtMoment, src => src.UnitPriceAtMoment.ToString("C"))
+                .Map(dest => dest.SubtotalPrice, src => src.SubtotalPrice.ToString("C"));
         }
     }
 }
