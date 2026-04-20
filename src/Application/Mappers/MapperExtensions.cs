@@ -19,6 +19,9 @@ namespace Tienda_UCN_api.Src.Application.Mappers
 
             var cartMapper = serviceProvider.GetRequiredService<CartMapper>();
             cartMapper.ConfigureAllMappings();
+
+            var orderMapper = serviceProvider.GetRequiredService<OrderMapper>();
+            orderMapper.ConfigureAllMappings();
         }
     }
 }
