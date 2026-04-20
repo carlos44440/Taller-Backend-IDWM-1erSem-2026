@@ -25,7 +25,7 @@ namespace TiendaUCN.src.Application.Mappers
             ConfigureProductMappings();
         }
 
-        public void ConfigureProductMappings()
+        private void ConfigureProductMappings()
         {
             TypeAdapterConfig<Product, ProductDetailCustomerDTO>.NewConfig()
                 .Map(dest => dest.Price, src => src.Price.ToString("C"))
