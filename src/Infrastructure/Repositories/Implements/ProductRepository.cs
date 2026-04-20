@@ -200,5 +200,13 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     .SetProperty(p => p.CategoryId, product.CategoryId)
                     .SetProperty(p => p.BrandId, product.BrandId)) > 0;
         }
+
+        public async Task<bool> UpdateStockAsync(int productId, int newStock)
+        {
+            return await _context.Products
+                .Where(p => p.Id == productId && p.IsDeleted == false)
+                .ExecuteUpdateAsync(p =>
+                    p.SetProperty(p => p.Stock, newStock)) > 0;
+        }
     }
 }

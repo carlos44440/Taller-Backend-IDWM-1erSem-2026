@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TiendaUCN.src.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class firstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,12 +178,10 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DeliveryCode = table.Column<string>(type: "TEXT", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DeliveryAddress = table.Column<string>(type: "TEXT", nullable: false),
                     TotalPrice = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -253,14 +251,12 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPriceAtMoment = table.Column<int>(type: "INTEGER", nullable: false),
                     NameAtMoment = table.Column<string>(type: "TEXT", nullable: false),
-                    BrandAtMoment = table.Column<string>(type: "TEXT", nullable: false),
-                    CategoryAtMoment = table.Column<string>(type: "TEXT", nullable: false),
+                    DescriptionAtMoment = table.Column<string>(type: "TEXT", nullable: false),
+                    UnitPriceAtMoment = table.Column<int>(type: "INTEGER", nullable: false),
+                    ImageUrlAtMoment = table.Column<string>(type: "TEXT", nullable: false),
                     SubtotalPrice = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,12 +265,6 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -304,11 +294,6 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                 name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
@@ -359,19 +344,19 @@ namespace TiendaUCN.src.Infrastructure.Data.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Roles");

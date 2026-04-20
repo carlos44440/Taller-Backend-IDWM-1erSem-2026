@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Tienda_UCN_api.src.Application.DTO;
 using TiendaUCN.src.Application.DTOs.CartDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
+using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.API.Controllers
 {
@@ -39,7 +40,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpPatch("items")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateItemQuantity([FromBody] AddChangeCartItemDTO changeCartItemDTO)
+        public async Task<IActionResult> UpdateCartItemQuantity([FromBody] AddChangeCartItemDTO changeCartItemDTO)
         {
             var buyerId = GetBuyerId();
             var userId = GetUserId();
@@ -49,7 +50,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpDelete("items/{productId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> RemoveItem([FromRoute] int productId)
+        public async Task<IActionResult> RemoveCartItem([FromRoute] int productId)
         {
             var buyerId = GetBuyerId();
             var userId = GetUserId();
@@ -65,6 +66,15 @@ namespace TiendaUCN.src.API.Controllers
             var userId = GetUserId();
             var cart = await _cartService.ClearCartAsync(buyerId, userId);
             return Ok(new GenericResponse<CartDTO>("Carrito limpiado exitosamente", cart));
+        }
+
+        [HttpPost("checkout")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> CheckoutCart()
+        {
+            var userId = GetUserId();
+            var result = await _cartService.CheckoutCartAsync(userId!.Value);
+            return Ok(new GenericResponse<CheckoutResultDTO>("Checkout realizado exitosamente", result));
         }
 
         private string GetBuyerId()

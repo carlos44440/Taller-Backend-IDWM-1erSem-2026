@@ -19,5 +19,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForAdminAsync(SearchParamsDTO searchParams);
         Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForCustomerAsync(SearchParamsDTO searchParams);
         Task<bool> UpdateAsync(Product product);
+        Task<bool> UpdateStockAsync(int productId, int newStock);
     }
 }

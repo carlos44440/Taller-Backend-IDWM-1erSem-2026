@@ -30,6 +30,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<ProductMapper>();
 builder.Services.AddScoped<CartMapper>();
+builder.Services.AddScoped<OrderMapper>();
 
 // Configuración de servicios y repositorios
 builder.Services.AddScoped<IUserService, UserService>();
@@ -48,6 +49,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // Configuración de trabajos en segundo plano
 builder.Services.AddScoped<IUserJob, UserJob>();
