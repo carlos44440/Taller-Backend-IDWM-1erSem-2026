@@ -40,7 +40,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpPatch("items")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateItemQuantity([FromBody] AddChangeCartItemDTO changeCartItemDTO)
+        public async Task<IActionResult> UpdateCartItemQuantity([FromBody] AddChangeCartItemDTO changeCartItemDTO)
         {
             var buyerId = GetBuyerId();
             var userId = GetUserId();
@@ -50,7 +50,7 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpDelete("items/{productId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> RemoveItem([FromRoute] int productId)
+        public async Task<IActionResult> RemoveCartItem([FromRoute] int productId)
         {
             var buyerId = GetBuyerId();
             var userId = GetUserId();
@@ -70,12 +70,13 @@ namespace TiendaUCN.src.API.Controllers
 
         [HttpPost("checkout")]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> Checkout()
+        public async Task<IActionResult> CheckoutCart()
         {
             var userId = GetUserId();
-            var result = await _cartService.CheckoutAsync(userId!.Value);
+            var result = await _cartService.CheckoutCartAsync(userId!.Value);
             return Ok(new GenericResponse<CheckoutResultDTO>("Checkout realizado exitosamente", result));
         }
+
         private string GetBuyerId()
         {
             // Intentar obtener el buyerId del contexto HTTP

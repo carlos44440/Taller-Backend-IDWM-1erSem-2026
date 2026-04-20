@@ -288,7 +288,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
-        public async Task<CheckoutResultDTO> CheckoutAsync(int userId)
+        public async Task<CheckoutResultDTO> CheckoutCartAsync(int userId)
         {
             // Obtener el carrito actual
             var cart = await _cartRepository.GetByUserIdAsync(userId);

@@ -9,6 +9,6 @@ namespace TiendaUCN.src.Application.Services.Interfaces
         Task<CartDTO> UpdateCartItemQuantityAsync(string buyerId, AddChangeCartItemDTO changeCartItemDTO, int? userId = null);
         Task<CartDTO> RemoveCartItemAsync(string buyerId, int productId, int? userId = null);
         Task<CartDTO> ClearCartAsync(string buyerId, int? userId = null);
-        Task<CheckoutResultDTO> CheckoutAsync(int userId);
+        Task<CheckoutResultDTO> CheckoutCartAsync(int userId);
     }
 }
