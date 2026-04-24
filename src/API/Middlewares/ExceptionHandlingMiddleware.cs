@@ -5,12 +5,20 @@ using Tienda_UCN_api.src.Application.DTO.BaseResponse;
 
 namespace TiendaUCN.src.API.Middlewares
 {
+    /// <summary>
+    /// Middleware del manejo de excepciones.
+    /// </summary>
+    /// <param name="next"> El siguiente middleware en la cadena de ejecución. </param>
     public class ExceptionHandlingMiddleware(RequestDelegate next)
     {
         // Punto de entrada del middleware, recibe el siguiente delegado en la cadena de middlewares
         private readonly RequestDelegate _next = next;
 
-        // Metodo que ejecuta automaticamente el middleware para cada solicitud HTTP
+        /// <summary>
+        /// Método que se ejecuta para cada solicitud HTTP. Intenta ejecutar el siguiente middleware y captura cualquier excepción no controlada.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             try
@@ -49,6 +57,11 @@ namespace TiendaUCN.src.API.Middlewares
             }
         }
 
+        /// <summary>
+        /// Metodo para mapear de excepciones a códigos de estado HTTP y títulos descriptivos.
+        /// </summary>
+        /// <param name="ex">La excepción a mapear.</param>
+        /// <returns>Una tupla con el código de estado y el título descriptivo.</returns>
         private static (int, string) MapExceptionToStatus(Exception ex)
         {
             return ex switch
