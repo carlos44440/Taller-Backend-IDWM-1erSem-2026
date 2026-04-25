@@ -2,8 +2,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TiendaUCN.src.Application.Validators
 {
+    /// <summary>
+    /// Atributo de validación personalizado para el RUT chileno.
+    /// </summary>
     public class RutValidationAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// Valida el RUT chileno.
+        /// </summary>
+        /// <param name="value">El valor a validar.</param>
+        /// <param name="validationContext">El contexto de validación.</param>
+        /// <returns>El resultado de la validación.</returns>
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)

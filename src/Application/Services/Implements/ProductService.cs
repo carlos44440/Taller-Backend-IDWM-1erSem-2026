@@ -10,13 +10,44 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de productos.
+    /// </summary>
     public class ProductService : IProductService
     {
+        /// <summary>
+        /// Interfaz del repositorio de productos.
+        /// </summary>
         private readonly IProductRepository _productRepository;
+
+        /// <summary>
+        /// Interfaz del servicio de gestión de imágenes.
+        /// </summary>
         private readonly IImageService _imageService;
+
+        /// <summary>
+        /// Interfaz del repositorio de marcas.
+        /// </summary>
         private readonly IBrandRepository _brandRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de categorías.
+        /// </summary>
         private readonly ICategoryRepository _categoryRepository;
+
+        /// <summary>
+        /// Configuración de la aplicación.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="ProductService"/>.
+        /// </summary>
+        /// <param name="productRepository">Interfaz del repositorio de productos.</param>
+        /// <param name="imageService">Servicio de gestión de imágenes.</param>
+        /// <param name="brandRepository">Interfaz del repositorio de marcas.</param>
+        /// <param name="categoryRepository">Interfaz del repositorio de categorías.</param>
+        /// <param name="configuration">Configuración de la aplicación.</param>
         public ProductService(IProductRepository productRepository, IImageService imageService, IBrandRepository brandRepository, ICategoryRepository categoryRepository, IConfiguration configuration)
         {
             _productRepository = productRepository;
@@ -26,6 +57,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Crea un nuevo producto.
+        /// </summary>
+        /// <param name="createProductDTO">Datos del producto a crear.</param>
+        /// <returns>Identificador del producto creado.</returns>
+        /// <exception cref="Exception">Lanzada cuando ocurre un error al crear el producto.</exception>
         public async Task<string> CreateProductAsync(CreateProductDTO createProductDTO)
         {
             // Verificar si la categoría existe
@@ -75,6 +112,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             return product.Id.ToString();
         }
 
+        /// <summary>
+        /// Cambia el estado de un producto.
+        /// </summary>
+        /// <param name="id">Identificador del producto.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="Exception">Lanzada cuando ocurre un error al cambiar el estado del producto.</exception>
         public async Task<string> SwitchStatusProductAsync(int id)
         {
             var productExists = await _productRepository.ExistsByIdAsync(id);
@@ -95,6 +138,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             return "Se cambio el estado a: " + statusUpdated;
         }
 
+        /// <summary>
+        /// Obtiene un producto por su ID para cliente.
+        /// </summary>
+        /// <param name="id">Identificador del producto.</param>
+        /// <returns>Detalles del producto para el cliente.</returns>
+        /// <exception cref="KeyNotFoundException">Lanzada cuando el producto no es encontrado.</exception>
         public async Task<ProductDetailCustomerDTO> GetProductByIdForCustomerAsync(int id)
         {
             // Verificar si el producto existe
@@ -128,6 +177,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             return productDetailCustomerDTO!;
         }
 
+        /// <summary>
+        /// Obtiene un producto por su ID para administrador.
+        /// </summary>
+        /// <param name="id">Identificador del producto.</param>
+        /// <returns>Detalles del producto para el administrador.</returns>
+        /// <exception cref="KeyNotFoundException">Lanzada cuando el producto no es encontrado.</exception>
         public async Task<ProductDetailAdminDTO> GetProductByIdForAdminAsync(int id)
         {
             // Verificar si el producto existe
@@ -161,6 +216,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return productDetailAdminDTO!;
         }
 
+        /// <summary>
+        /// Elimina un producto.
+        /// </summary>
+        /// <param name="id">Identificador del producto.</param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">Lanzada cuando el producto no es encontrado.</exception>
+        /// <exception cref="Exception">Lanzada cuando ocurre un error al eliminar el producto.</exception>
         public async Task DeleteProductAsync(int id)
         {
             var productExists = await _productRepository.ExistsByIdAsync(id);
@@ -178,6 +240,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
         }
 
+        /// <summary>
+        /// Obtiene el listado de productos para administrador con paginación y filtros.
+        /// </summary>
+        /// <param name="searchParams">Parámetros de búsqueda.</param>
+        /// <returns>Listado de productos para administrador.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
         public async Task<ListedProductsForAdminDTO> GetListedProductsForAdminAsync(SearchParamsDTO searchParams)
         {
             // Obtener los productos filtrados y el total de productos que cumplen con el filtro
@@ -210,6 +278,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             };
         }
 
+        /// <summary>
+        /// Obtiene el listado de productos para cliente con paginación y filtros.
+        /// </summary>
+        /// <param name="searchParams">Parámetros de búsqueda.</param>
+        /// <returns>Listado de productos para cliente.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
         public async Task<ListedProductsForCustomerDTO> GetListedProductsForCustomerAsync(SearchParamsDTO searchParams)
         {
             // Obtener los productos filtrados y el total de productos que cumplen con el filtro
@@ -242,6 +316,15 @@ namespace TiendaUCN.src.Application.Services.Implements
             };
         }
 
+        /// <summary>
+        /// Actualiza un producto.
+        /// </summary>
+        /// <param name="id">ID del producto a actualizar.</param>
+        /// <param name="updateProductDTO">DTO con los datos para actualizar el producto.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task UpdateProductAsync(int id, UpdateProductDTO updateProductDTO)
         {
             // Normalizar al inicio del método
