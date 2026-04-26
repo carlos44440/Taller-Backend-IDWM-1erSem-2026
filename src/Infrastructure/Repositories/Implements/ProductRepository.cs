@@ -6,14 +6,31 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 {
+    /// <summary>
+    /// Implementación del repositorio de productos.
+    /// </summary>
     public class ProductRepository : IProductRepository
     {
+        /// <summary>
+        /// Contexto de la base de datos.
+        /// </summary>
         private readonly DataContext _context;
+
+        /// <summary>
+        /// Constructor del repositorio de productos.
+        /// </summary>
+        /// <param name="context">Contexto de la base de datos</param>
         public ProductRepository(DataContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Verifica si un producto existe por su nombre y el nombre de su marca.
+        /// </summary>
+        /// <param name="name">El nombre del producto</param>
+        /// <param name="brandName">El nombre de la marca</param>
+        /// <returns>true si existe, false si no</returns>
         public async Task<bool> ExistsByNameAndBrandAsync(string name, string brandName)
         {
             // Verificar producto unico, antes de crear un producto. 
@@ -27,12 +44,22 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.Brand.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Crea un nuevo producto en la base de datos.
+        /// </summary>
+        /// <param name="product">El producto a crear</param>
+        /// <returns>true si lo crea, false si no</returns>
         public async Task<bool> CreateAsync(Product product)
         {
             _context.Products.Add(product);
             return await _context.SaveChangesAsync() > 0;
         }
 
+        /// <summary>
+        /// Verifica si un producto existe por su ID.
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>true si existe, false si no</returns>
         public async Task<bool> ExistsByIdAsync(int id)
         {
             // Verificar producto existente.
@@ -42,6 +69,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .AnyAsync(p => p.Id == id && p.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Cambia el estado de un producto (activo/inactivo).
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>true si lo cambia, false si no</returns>
         public async Task<bool> SwitchStatusAsync(int id)
         {
             return await _context.Products
@@ -50,6 +82,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.SetProperty(p => p.IsActive, p => !p.IsActive)) > 0;
         }
 
+        /// <summary>
+        /// Obtiene el estado de un producto por su ID.
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>El estado del producto o null si no se encuentra</returns>
         public async Task<string?> GetStatusAsync(int id)
         {
             return await _context.Products
@@ -58,6 +95,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Verifica si un producto existe por su ID y si está activo (para clientes).
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>true si existe y está activo, false si no</returns>
         public async Task<bool> ExistsByIdCustomerAsync(int id)
         {
             // Verificar producto existente.
@@ -70,6 +112,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Obtiene un producto por su ID para clientes (solo si está activo).
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>El producto o null si no se encuentra o no está activo</returns>
         public async Task<Product?> GetProductByIdForCustomerAsync(int id)
         {
             // Obtener producto por id.
@@ -85,6 +132,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.IsActive == true);
         }
 
+        /// <summary>
+        /// Obtiene un producto por su ID para administradores (sin importar su estado).
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>El producto o null si no se encuentra</returns>
         public async Task<Product?> GetProductByIdForAdminAsync(int id)
         {
             // Obtener producto por id.
@@ -99,6 +151,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Elimina un producto por su ID.
+        /// </summary>
+        /// <param name="id">El ID del producto</param>
+        /// <returns>true si lo elimina, false si no</returns>
         public async Task<bool> DeleteAsync(int id)
         {
             // Eliminar producto por id.
@@ -109,6 +166,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     p.SetProperty(p => p.IsDeleted, true)) > 0;
         }
 
+        /// <summary>
+        /// Obtiene una lista de productos filtrados y paginados para administradores.
+        /// </summary>
+        /// <param name="searchParams">Los parámetros de búsqueda</param>
+        /// <returns>Una tupla con la lista de productos y el total de registros</returns>
         public async Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForAdminAsync(SearchParamsDTO searchParams)
         {
             // Obtener queryable de productos que no estén eliminados
@@ -150,6 +212,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return (products, totalCount);
         }
 
+        /// <summary>
+        /// Obtiene una lista de productos filtrados y paginados para clientes (solo activos).
+        /// </summary>
+        /// <param name="searchParams">Los parámetros de búsqueda</param>
+        /// <returns>Una tupla con la lista de productos y el total de registros</returns>
         public async Task<(IEnumerable<Product> products, int totalCount)> GetFilteredForCustomerAsync(SearchParamsDTO searchParams)
         {
             // Obtener queryable de productos que estén activos y no eliminados
@@ -188,6 +255,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return (products, totalCount);
         }
 
+        /// <summary>
+        /// Actualiza un producto existente.
+        /// </summary>
+        /// <param name="product">El producto a actualizar</param>
+        /// <returns>true si lo actualiza, false si no</returns>
         public async Task<bool> UpdateAsync(Product product)
         {
             return await _context.Products
@@ -201,6 +273,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     .SetProperty(p => p.BrandId, product.BrandId)) > 0;
         }
 
+        /// <summary>
+        /// Actualiza el stock de un producto por su ID.
+        /// </summary>
+        /// <param name="productId">El ID del producto</param>
+        /// <param name="newStock">El nuevo stock</param>
+        /// <returns>true si lo actualiza, false si no</returns>
         public async Task<bool> UpdateStockAsync(int productId, int newStock)
         {
             return await _context.Products

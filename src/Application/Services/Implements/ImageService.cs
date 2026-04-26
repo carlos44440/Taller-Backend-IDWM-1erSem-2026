@@ -8,20 +8,78 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de gestión de imágenes.
+    /// </summary>
     public class ImageService : IImageService
     {
+        /// <summary>
+        /// Interfaz de configuración.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Cliente de Cloudinary.
+        /// </summary>
         private readonly Cloudinary _cloudinary;
+
+        /// <summary>
+        /// Extensiones de archivo permitidas para las imágenes.
+        /// </summary>
         private readonly string[] _allowedExtensions;
+
+        /// <summary>
+        /// Tamaño máximo permitido para las imágenes en bytes.
+        /// </summary>
         private readonly int _maxFileSizeInBytes;
+
+        /// <summary>
+        /// Repositorio de imágenes.
+        /// </summary>
         private readonly IImageRepository _imageRepository;
+
+        /// <summary>
+        /// Configuración del nombre de la nube de Cloudinary.
+        /// </summary>
         private readonly string _cloudName;
+
+        /// <summary>
+        /// Configuración de la clave de la API de Cloudinary.
+        /// </summary>
         private readonly string _cloudApiKey;
+
+        /// <summary>
+        /// Configuración del secreto de la API de Cloudinary.
+        /// </summary>
         private readonly string _cloudApiSecret;
+
+        /// <summary>
+        /// Configuración del ancho.
+        /// </summary>
         private readonly int _transformationWidth;
+
+        /// <summary>
+        /// Configuración de recorte.
+        /// </summary>
         private readonly string _transformationCrop;
+
+        /// <summary>
+        /// Configuración de calidad.
+        /// </summary>
         private readonly string _transformationQuality;
+
+        /// <summary>
+        /// Configuración del formato de la imagen optimizada.
+        /// </summary>
         private readonly string _transformationFetchFormat;
+
+        /// <summary>
+        /// Constructor del servicio de gestión de imágenes.
+        /// </summary>
+        /// <param name="configuration">Interfaz de configuración</param>
+        /// <param name="imageRepository">Repositorio de imágenes</param>
+        /// <exception cref="InvalidOperationException"></exception>
+
         public ImageService(IConfiguration configuration, IImageRepository imageRepository)
         {
             _configuration = configuration;
@@ -39,6 +97,15 @@ namespace TiendaUCN.src.Application.Services.Implements
             if (!int.TryParse(_configuration["Products:ImageMaxSizeInBytes"], out _maxFileSizeInBytes)) { throw new InvalidOperationException("La configuración del tamaño de la imagen es obligatoria"); }
             if (!int.TryParse(_configuration["Products:TransformationWidth"], out _transformationWidth)) { throw new InvalidOperationException("La configuración del ancho de la transformación es obligatoria"); }
         }
+
+        /// <summary>
+        /// Sube una imagen a Cloudinary y la asocia a un producto.
+        /// </summary>
+        /// <param name="file">Archivo de imagen a subir</param>
+        /// <param name="productId">ID del producto al que asociar la imagen</param>
+        /// <returns>True si la imagen se subió correctamente, false en caso contrario</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<bool> UploadAsync(IFormFile file, int productId)
         {
             // Validar el productId
@@ -137,9 +204,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return true;
         }
 
+        /// <summary>
+        /// Elimina una imagen de Cloudinary y de la base de datos.
+        /// </summary>
+        /// <param name="publicId">ID público de la imagen a eliminar</param>
+        /// <returns>True si la imagen se eliminó correctamente, false en caso contrario</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<bool> DeleteAsync(string publicId)
         {
-
             // Eliminar la imagen de Cloudinary
             var deletionParams = new DeletionParams(publicId);
             Log.Information($"Eliminando imagen con PublicId: {publicId} de Cloudinary");
@@ -167,6 +239,11 @@ namespace TiendaUCN.src.Application.Services.Implements
             return true;
         }
 
+        /// <summary>
+        /// Elimina una imagen de Cloudinary.
+        /// </summary>
+        /// <param name="publicId">ID público de la imagen a eliminar</param>
+        /// <returns>True si la imagen se eliminó correctamente, false en caso contrario</returns>
         private async Task<bool> DeleteInCloudinaryAsync(string publicId)
         {
             var deletionParams = new DeletionParams(publicId);
@@ -181,6 +258,11 @@ namespace TiendaUCN.src.Application.Services.Implements
             return true;
         }
 
+        /// <summary>
+        /// Valida que el archivo sea una imagen real.
+        /// </summary>
+        /// <param name="file">El archivo a validar</param>
+        /// <returns>True si el archivo es una imagen válida, false en caso contrario</returns>
         private bool IsValidImageFile(IFormFile file)
         {
             try

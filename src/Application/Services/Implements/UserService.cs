@@ -7,18 +7,64 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de usuarios.
+    /// </summary>
     public class UserService : IUserService
     {
+        /// <summary>
+        /// Interfaz del repositorio de usuarios.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de códigos de verificación.
+        /// </summary>
         private readonly IVerificationCodeRepository _verificationCodeRepository;
+
+        /// <summary>
+        /// Servicio de envío de correos electrónicos.
+        /// </summary>
         private readonly IEmailService _emailService;
+
+        /// <summary>
+        /// Configuración de la aplicación.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Servicio de generación de tokens.
+        /// </summary>
         private readonly ITokenService _tokenService;
+
+        /// <summary>
+        /// Tiempo de expiración del código de verificación.
+        /// </summary>
         private readonly int _verificationCodeExpiry;
+
+        /// <summary>
+        /// Número máximo de intentos fallidos de verificación.
+        /// </summary>
         private readonly int _maxFailedEmailVerificationAttempts;
+
+        /// <summary>
+        /// Tiempo de espera para reenviar el correo de verificación.
+        /// </summary>
         private readonly int _waitingTimeInMinutesAfterResendEmail;
+
+        /// <summary>
+        /// Días para eliminar cuentas no verificadas.
+        /// </summary>
         private readonly int _daysToDeleteUnverifiedAccount;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="UserService"/>.
+        /// </summary>
+        /// <param name="emailService">Servicio de envío de correos electrónicos.</param>
+        /// <param name="userRepository">Interfaz del repositorio de usuarios.</param>
+        /// <param name="verificationCodeRepository">Interfaz del repositorio de códigos de verificación.</param>
+        /// <param name="configuration">Configuración de la aplicación.</param>
+        /// <param name="tokenService">Servicio de generación de tokens.</param>
         public UserService(IEmailService emailService, IUserRepository userRepository, IVerificationCodeRepository verificationCodeRepository, IConfiguration configuration, ITokenService tokenService)
         {
             _emailService = emailService;
@@ -32,6 +78,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             _daysToDeleteUnverifiedAccount = _configuration.GetValue<int>("Jobs:DaysToDeleteUnverifiedAccount");
         }
 
+        /// <summary>
+        /// Registra un nuevo usuario.
+        /// </summary>
+        /// <param name="registerDTO">Datos del usuario a registrar.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> RegisterAsync(RegisterDTO registerDTO)
         {
             // Validar si el usuario ya existe por nombre
@@ -95,6 +147,13 @@ namespace TiendaUCN.src.Application.Services.Implements
 
         }
 
+        /// <summary>
+        /// Verifica el correo electrónico de un usuario.
+        /// </summary>
+        /// <param name="emailVerificationDTO">Datos de verificación.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO)
         {
             // Obtener el usuario por correo electrónico
@@ -173,6 +232,10 @@ namespace TiendaUCN.src.Application.Services.Implements
             Log.Information($"Correo electrónico verificado exitosamente para el usuario {user.Email}");
         }
 
+        /// <summary>
+        /// Genera un código de verificación y su fecha de expiración.
+        /// </summary>
+        /// <returns>Tupla con el código de verificación y su fecha de expiración.</returns>
         private async Task<(string, DateTime)> GenerateCodeAndExpiryAsync()
         {
             // Generar un codigo de verificación y su fecha de expiración
@@ -182,6 +245,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return await Task.FromResult((verificationCode, verificationCodeExpiry));
         }
 
+        /// <summary>
+        /// Inicia sesión para un usuario autenticado.
+        /// </summary>
+        /// <param name="loginDTO">Credenciales del usuario.</param>
+        /// <returns>Token de autenticación.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> LoginAsync(LoginDTO loginDTO)
         {
             // Obtener el usuario por correo electrónico
@@ -210,6 +280,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             return token;
         }
 
+        /// <summary>
+        /// Cierra la sesión de un usuario.
+        /// </summary>
+        /// <param name="token">Token de autenticación.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<string> LogoutAsync(string token)
         {
             // Validar que se haya proporcionado un token
@@ -226,6 +302,10 @@ namespace TiendaUCN.src.Application.Services.Implements
             return "Logout exitoso.";
         }
 
+        /// <summary>
+        /// Elimina los usuarios no confirmados.
+        /// </summary>
+        /// <returns>Cantidad de usuarios eliminados.</returns>
         public async Task<int> DeleteUnconfirmedUsersAsync()
         {
             int deletedUsers = await _userRepository.DeleteUnconfirmedUsersAsync(_daysToDeleteUnverifiedAccount);
@@ -233,6 +313,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return deletedUsers;
         }
 
+        /// <summary>
+        /// Reenvía el código de verificación a un usuario que no ha verificado su correo electrónico.
+        /// </summary>
+        /// <param name="resendVerificationCodeDTO">DTO con los datos para reenviar el código de verificación.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> ResendVerificationCodeAsync(ResendVerificationCodeDTO resendVerificationCodeDTO)
         {
             // Obtener el usuario por correo electrónico

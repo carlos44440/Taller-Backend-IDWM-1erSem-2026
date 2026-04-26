@@ -6,13 +6,31 @@ using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Application.Mappers
 {
+    /// <summary>
+    /// Mapper para los productos
+    /// </summary>
     public class ProductMapper
     {
+        /// <summary>
+        /// Interfaz de configuración.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// URL de la imagen por defecto.
+        /// </summary>
         private readonly string? _defaultImageURL;
+
+        /// <summary>
+        /// Número de unidades para considerar que el producto tiene pocas unidades disponibles.
+        /// </summary>
         private readonly int _fewUnitsAvailable;
 
-
+        /// <summary>
+        /// Constructor del ProductMapper
+        /// </summary>
+        /// <param name="configuration">Interfaz de configuración</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public ProductMapper(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -20,11 +38,17 @@ namespace TiendaUCN.src.Application.Mappers
             _fewUnitsAvailable = _configuration.GetValue<int?>("Products:FewUnitsAvailable") ?? throw new InvalidOperationException("La configuración 'FewUnitsAvailable' no puede ser nula.");
         }
 
+        /// <summary>
+        /// Configura todas las mapeos para los productos.
+        /// </summary>
         public void ConfigureAllMappings()
         {
             ConfigureProductMappings();
         }
 
+        /// <summary>
+        /// Configura el mapeo de los productos.
+        /// </summary>
         private void ConfigureProductMappings()
         {
             TypeAdapterConfig<Product, ProductDetailCustomerDTO>.NewConfig()
@@ -57,6 +81,11 @@ namespace TiendaUCN.src.Application.Mappers
                 .Map(dest => dest.Available, src => src.IsActive ? "Activo" : "Inactivo");
         }
 
+        /// <summary>
+        /// Obtiene un indicador de stock.
+        /// </summary>
+        /// <param name="stock">La cantidad de unidades en stock</param>
+        /// <returns>El indicador de stock</returns>
         private string GetStockIndicator(int stock)
         {
             if (stock == 0) { return "Producto sin stock"; }

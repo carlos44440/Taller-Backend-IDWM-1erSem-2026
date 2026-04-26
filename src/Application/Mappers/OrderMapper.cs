@@ -4,11 +4,31 @@ using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Application.Mappers
 {
+    /// <summary>
+    /// Mapper para las órdenes de compra
+    /// </summary>
     public class OrderMapper
     {
+        /// <summary>
+        /// Interfaz de configuración.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// URL de la imagen por defecto.
+        /// </summary>
         private readonly string _defaultImageUrl;
+
+        /// <summary>
+        /// Información de la zona horaria.
+        /// </summary>
         private readonly TimeZoneInfo _timeZoneInfo;
+
+        /// <summary>
+        /// Constructor del OrderMapper
+        /// </summary>
+        /// <param name="configuration">Interfaz de configuración</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public OrderMapper(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -17,12 +37,18 @@ namespace TiendaUCN.src.Application.Mappers
             _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
         }
 
+        /// <summary>
+        /// Configura todas las mapeos para las órdenes de compra.
+        /// </summary>
         public void ConfigureAllMappings()
         {
             ConfigureOrderItemsMappings();
             ConfigureOrderMappings();
         }
 
+        /// <summary>
+        /// Configura el mapeo de las órdenes de compra.
+        /// </summary>
         private void ConfigureOrderMappings()
         {
             TypeAdapterConfig<Cart, Order>.NewConfig()
@@ -35,6 +61,9 @@ namespace TiendaUCN.src.Application.Mappers
                 .Map(dest => dest.Items, src => src.OrderItems.Select(i => i.Adapt<OrderItemDTO>()).ToList());
         }
 
+        /// <summary>
+        /// Configura el mapeo de los items de las órdenes de compra.
+        /// </summary>
         private void ConfigureOrderItemsMappings()
         {
             TypeAdapterConfig<CartItem, OrderItem>.NewConfig()

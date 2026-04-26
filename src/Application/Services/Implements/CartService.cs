@@ -7,11 +7,32 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio del carrito de compras.
+    /// </summary>
     public class CartService : ICartService
     {
+        /// <summary>
+        /// Interfaz del repositorio de carritos.
+        /// </summary>
         private readonly ICartRepository _cartRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de productos.
+        /// </summary>
         private readonly IProductRepository _productRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de usuarios.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="CartService"/>.
+        /// </summary>
+        /// <param name="cartRepository">Interfaz del repositorio de carritos.</param>
+        /// <param name="productRepository">Interfaz del repositorio de productos.</param>
+        /// <param name="userRepository">Interfaz del repositorio de usuarios.</param>
         public CartService(ICartRepository cartRepository, IProductRepository productRepository, IUserRepository userRepository)
         {
             _cartRepository = cartRepository;
@@ -19,6 +40,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             _userRepository = userRepository;
         }
 
+        /// <summary>
+        /// Crea un nuevo carrito de compras o retorna uno existente asociado al comprador.
+        /// </summary>
+        /// <param name="buyerId">Identificador del comprador.</param>
+        /// <param name="userId">Identificador del usuario autenticado (opcional).</param>
+        /// <returns>Un objeto <see cref="CartDTO"/> con la información del carrito.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al crear o obtener el carrito.</exception>
         public async Task<CartDTO> CreateOrGetCartAsync(string buyerId, int? userId = null)
         {
             // Inicializar el carrito como null
@@ -91,6 +119,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart!.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Agrega un producto al carrito de compras o incrementa su cantidad si ya existe.
+        /// </summary>
+        /// <param name="buyerId">Identificador del comprador.</param>
+        /// <param name="addCartItemDTO">DTO con la información del item a agregar.</param>
+        /// <param name="userId">Identificador del usuario autenticado (opcional).</param>
+        /// <returns>Un objeto <see cref="CartDTO"/> con la información del carrito actualizado.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al agregar el item al carrito.</exception>
         public async Task<CartDTO> AddCartItemAsync(string buyerId, AddChangeCartItemDTO addCartItemDTO, int? userId = null)
         {
             // Inicializar el carrito como null
@@ -161,6 +197,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Actualiza la cantidad de un producto específico dentro del carrito.
+        /// </summary>
+        /// <param name="buyerId">Identificador del comprador.</param>
+        /// <param name="changeCartItemDTO">DTO con la información del item a actualizar.</param>
+        /// <param name="userId">Identificador del usuario autenticado (opcional).</param>
+        /// <returns>Un objeto <see cref="CartDTO"/> con la información del carrito actualizado.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al actualizar la cantidad del item en el carrito.</exception>
         public async Task<CartDTO> UpdateCartItemQuantityAsync(string buyerId, AddChangeCartItemDTO changeCartItemDTO, int? userId = null)
         {
             // Obtener el carrito actual
@@ -211,6 +255,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Elimina un producto específico del carrito de compras.
+        /// </summary>
+        /// <param name="buyerId">Identificador del comprador.</param>
+        /// <param name="productId">Identificador del producto a eliminar.</param>
+        /// <param name="userId">Identificador del usuario autenticado (opcional).</param>
+        /// <returns>Un objeto <see cref="CartDTO"/> con la información del carrito actualizado.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al remover el producto del carrito.</exception>
         public async Task<CartDTO> RemoveCartItemAsync(string buyerId, int productId, int? userId = null)
         {
             // Obtener el carrito actual
@@ -256,6 +308,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Elimina todos los productos del carrito de compras.
+        /// </summary>
+        /// <param name="buyerId">Identificador del comprador.</param>
+        /// <param name="userId">Identificador del usuario autenticado (opcional).</param>
+        /// <returns>Un objeto <see cref="CartDTO"/> con la información del carrito actualizado.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al limpiar el carrito.</exception>
         public async Task<CartDTO> ClearCartAsync(string buyerId, int? userId = null)
         {
             // Obtener el carrito actual
@@ -288,6 +347,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Realiza el proceso de checkout del carrito de compras.
+        /// </summary>
+        /// <param name="userId">Identificador del usuario autenticado.</param>
+        /// <returns>Un objeto <see cref="CheckoutResultDTO"/> con la información del resultado del checkout.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error durante el proceso de checkout.</exception>
         public async Task<CheckoutResultDTO> CheckoutCartAsync(int userId)
         {
             // Obtener el carrito actual
@@ -373,6 +438,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return checkoutResult;
         }
 
+        /// <summary>
+        /// Crea un nuevo carrito vacío.
+        /// </summary>
+        /// <param name="buyerId">El identificador del comprador.</param>
+        /// <param name="userId">El identificador del usuario autenticado.</param>
+        /// <returns>El identificador del nuevo carrito creado.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error al crear el carrito.</exception>
         private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
         {
             // Crear un nuevo carrito vacío
@@ -394,6 +466,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return newCart.Id;
         }
 
+        /// <summary>
+        /// Obtiene el carrito de compras asociado al comprador, ya sea por userId o buyerId.
+        /// </summary>
+        /// <param name="buyerId">El identificador del comprador.</param>
+        /// <param name="userId">El identificador del usuario autenticado.</param>
+        /// <returns>El carrito de compras encontrado.</returns>
+        /// <exception cref="Exception">Se lanza si no se encuentra un carrito para los parámetros proporcionados.</exception>
         private async Task<Cart> GetCartAsync(string buyerId, int? userId)
         {
             Cart? cart;
