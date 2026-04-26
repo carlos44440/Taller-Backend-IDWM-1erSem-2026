@@ -6,25 +6,52 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 {
+    /// <summary>
+    /// Implementación del repositorio de órdenes.
+    /// </summary>
     public class OrderRepository : IOrderRepository
     {
+        /// <summary>
+        /// Contexto de datos para acceder a la base de datos.
+        /// </summary>
         private readonly DataContext _context;
+
+        /// <summary>
+        /// Constructor del repositorio de órdenes.
+        /// </summary>
+        /// <param name="context">Contexto de datos para acceder a la base de datos</param>
         public OrderRepository(DataContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Verifica si una orden existe por su código.
+        /// </summary>
+        /// <param name="code">El código de la orden</param>
+        /// <returns>true si existe, false si no</returns>
         public async Task<bool> ExistsByCodeAsync(string code)
         {
             return await _context.Orders.AnyAsync(o => o.Code == code);
         }
 
+        /// <summary>
+        /// Crea una nueva orden en la base de datos.
+        /// </summary>
+        /// <param name="order">La orden a crear</param>
+        /// <returns>true si la crea, false si no</returns>
         public async Task<bool> CreateAsync(Order order)
         {
             _context.Orders.Add(order);
             return await _context.SaveChangesAsync() > 0;
         }
 
+        /// <summary>
+        /// Obtiene una orden por su código y el ID del usuario.
+        /// </summary>
+        /// <param name="code">El código de la orden</param>
+        /// <param name="userId">El ID del usuario</param>
+        /// <returns>La orden encontrada o null si no se encuentra</returns>
         public async Task<Order?> GetByCodeAsync(string code, int userId)
         {
             return await _context.Orders
@@ -33,6 +60,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .FirstOrDefaultAsync(o => o.Code == code && o.UserId == userId);
         }
 
+        /// <summary>
+        /// Obtiene un listado de órdenes filtradas por el ID del usuario.
+        /// </summary>
+        /// <param name="searchParams">Los parámetros de búsqueda</param>
+        /// <param name="userId">El ID del usuario</param>
+        /// <returns>Una tupla con las órdenes y el total de registros</returns>
         public async Task<(IEnumerable<Order> orders, int totalCount)> GetFilteredForUserIdAsync(SearchParamsDTO searchParams, int userId)
         {
             // Obtener queryable de productos que estén activos y no eliminados

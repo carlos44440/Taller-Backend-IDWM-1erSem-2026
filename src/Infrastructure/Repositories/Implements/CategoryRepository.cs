@@ -5,14 +5,30 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 {
+    /// <summary>
+    /// Implementación del repositorio de categorías.
+    /// </summary>
     public class CategoryRepository : ICategoryRepository
     {
+        /// <summary>
+        /// Contexto de datos para acceder a la base de datos.
+        /// </summary>
         private readonly DataContext _context;
+
+        /// <summary>
+        /// Constructor del repositorio de categorías.
+        /// </summary>
+        /// <param name="context">Contexto de datos para acceder a la base de datos</param>
         public CategoryRepository(DataContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Verifica si una categoría existe por su nombre.
+        /// </summary>
+        /// <param name="name">Nombre de la categoría</param>
+        /// <returns>true si existe, false si no</returns>
         public async Task<bool> ExistsByNameAsync(string name)
         {
             return await _context.Categories
@@ -21,12 +37,22 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     b.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Crea una nueva categoría en la base de datos.
+        /// </summary>
+        /// <param name="category">La categoría a crear</param>
+        /// <returns>true si la crea, false si no</returns>
         public async Task<bool> CreateAsync(Category category)
         {
             _context.Categories.Add(category);
             return await _context.SaveChangesAsync() > 0;
         }
 
+        /// <summary>
+        /// Verifica si una categoría existe por su ID.
+        /// </summary>
+        /// <param name="id">El ID de la categoría</param>
+        /// <returns>true si existe, false si no</returns>
         public async Task<bool> ExistsByIdAsync(int id)
         {
             return await _context.Categories.AnyAsync(b =>
@@ -34,6 +60,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 b.IsDeleted == false);
         }
 
+        /// <summary>
+        /// Actualiza el nombre de una categoría existente.
+        /// </summary>
+        /// <param name="id">El ID de la categoría</param>
+        /// <param name="name">El nuevo nombre de la categoría</param>
+        /// <returns>true si la actualiza, false si no</returns>
         public async Task<bool> UpdateNameAsync(int id, string name)
         {
             var result = await _context.Categories
@@ -43,6 +75,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return result > 0;
         }
 
+        /// <summary>
+        /// Actualiza la descripción de una categoría existente.
+        /// </summary>
+        /// <param name="id">El ID de la categoría</param>
+        /// <param name="description">La nueva descripción de la categoría</param>
+        /// <returns>true si la actualiza, false si no</returns>
         public async Task<bool> UpdateDescriptionAsync(int id, string description)
         {
             var result = await _context.Categories
@@ -52,6 +90,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return result > 0;
         }
 
+        /// <summary>
+        /// Elimina una categoría existente.
+        /// </summary>
+        /// <param name="id">El ID de la categoría</param>
+        /// <returns>true si la elimina, false si no</returns>
         public async Task<bool> DeleteAsync(int id)
         {
             var result = await _context.Categories
@@ -61,6 +104,11 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             return result > 0;
         }
 
+        /// <summary>
+        /// Obtiene el ID de una categoría por su nombre.
+        /// </summary>
+        /// <param name="name">El nombre de la categoría</param>
+        /// <returns>El ID de la categoría</returns>
         public async Task<int> GetIdByNameAsync(string name)
         {
             return await _context.Categories
