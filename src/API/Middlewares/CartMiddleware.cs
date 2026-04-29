@@ -2,12 +2,32 @@ using Serilog;
 
 namespace TiendaUCN.src.API.Middlewares
 {
+    /// <summary>
+    /// Middleware de Cart.
+    /// </summary>
     public class CartMiddleware
     {
+        /// <summary>
+        /// El siguiente middleware en la cadena de ejecución.
+        /// </summary>
         private readonly RequestDelegate _next;
+
+        /// <summary>
+        /// La configuración de la aplicación.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Expiración en días para la cookie de comprador (BuyerId).
+        /// </summary>
         private readonly int _cookieExpirationDays;
 
+        /// <summary>
+        /// Constructor del middleware de Cart.
+        /// </summary>
+        /// <param name="next"> El siguiente middleware en la cadena de ejecución. </param>
+        /// <param name="configuration"> La configuración de la aplicación. </param>
+        /// <exception cref="ArgumentNullException"></exception>
         public CartMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
@@ -15,6 +35,11 @@ namespace TiendaUCN.src.API.Middlewares
             _cookieExpirationDays = _configuration.GetValue<int?>("CookieExpirationDays") ?? throw new ArgumentNullException("La expiración en días de la cookie no está configurada.");
         }
 
+        /// <summary>
+        /// Invoca el middleware para gestionar la cookie de comprador (BuyerId) y asegurar que esté presente en cada solicitud.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             // Verificamos si el cliente ya tiene una cookie de comprador (BuyerId)

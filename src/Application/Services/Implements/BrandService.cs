@@ -7,15 +7,31 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de marcas.
+    /// </summary>
     public class BrandService : IBrandService
     {
+        /// <summary>
+        /// Repositorio de marcas.
+        /// </summary>
         private readonly IBrandRepository _brandRepository;
 
+        /// <summary>
+        /// Constructor del servicio de marcas.
+        /// </summary>
+        /// <param name="brandRepository">El repositorio de marcas.</param>
         public BrandService(IBrandRepository brandRepository)
         {
             _brandRepository = brandRepository;
         }
 
+        /// <summary>
+        /// Crea una nueva marca.
+        /// </summary>
+        /// <param name="brandDto">El DTO de la marca a crear.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> CreateBrandAsync(CreateBrandCategoryDTO brandDto)
         {
             var brandExists = await _brandRepository.ExistsByNameAsync(brandDto.Name);
@@ -39,6 +55,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return $"Marca '{brand.Name}' creada exitosamente.";
         }
 
+        /// <summary>
+        /// Actualiza una marca existente.
+        /// </summary>
+        /// <param name="brandId">El ID de la marca a actualizar.</param>
+        /// <param name="brandDto">El DTO de la marca con los nuevos datos.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> UpdateBrandAsync(int brandId, UpdateBrandCategoryDTO brandDto)
         {
             // Verificar la marca por su ID
@@ -117,6 +141,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
         }
 
+        /// <summary>
+        /// Elimina una marca por su ID.
+        /// </summary>
+        /// <param name="brandId">El ID de la marca a eliminar.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> DeleteBrandAsync(int brandId)
         {
             // Verificar la marca por su ID

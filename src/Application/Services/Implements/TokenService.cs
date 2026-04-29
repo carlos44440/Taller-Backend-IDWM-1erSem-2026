@@ -8,13 +8,37 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de gestión de tokens JWT.
+    /// </summary>
     public class TokenService : ITokenService
     {
+        /// <summary>
+        /// Clave secreta.
+        /// </summary>
         private readonly string _jwtSecret;
+
+        /// <summary>
+        /// Interfaz del repositorio de tokens.
+        /// </summary>
         private readonly ITokenRepository _tokenRepository;
+
+        /// <summary>
+        /// Interfaz de configuración.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Tiempo de expiración del token en horas.
+        /// </summary>
         private readonly int _tokenExpirationInHours;
 
+        /// <summary>
+        /// Constructor del servicio de tokens. 
+        /// </summary>
+        /// <param name="tokenRepository">Interfaz del repositorio de tokens</param>
+        /// <param name="configuration">Interfaz de configuración</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public TokenService(ITokenRepository tokenRepository, IConfiguration configuration)
         {
             _tokenRepository = tokenRepository;
@@ -22,6 +46,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             _tokenExpirationInHours = int.Parse(_configuration["Token:ExpirationTimeInHours"] ?? throw new InvalidOperationException("Token expiration time is not configured."));
             _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? throw new InvalidOperationException("JWT secret key is not configured.");
         }
+
+        /// <summary>
+        /// Genera un token JWT.
+        /// </summary>
+        /// <param name="user">El usuario para el cual generar el token</param>
+        /// <param name="roleName">El nombre del rol del usuario</param>
+        /// <returns>El token JWT generado</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public string GenerateToken(User user, string roleName)
         {
             try
@@ -59,6 +91,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
         }
 
+        /// <summary>
+        /// Agrega un token a la lista negra (blacklist).
+        /// </summary>
+        /// <param name="token">El token a agregar a la lista negra</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task AddToBlacklistAsync(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -88,6 +126,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             await _tokenRepository.AddAsync(blacklistedToken);
         }
 
+        /// <summary>
+        /// Verifica si un token está en la lista negra (blacklist).
+        /// </summary>
+        /// <param name="token">El token a verificar</param>
+        /// <returns>True si el token está en la lista negra, false en caso contrario</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<bool> IsTokenBlacklistedAsync(string token)
         {
             // Lee el token JWT para extraer el jti
@@ -108,6 +152,10 @@ namespace TiendaUCN.src.Application.Services.Implements
             throw new InvalidOperationException("El token no contiene un jti válido.");
         }
 
+        /// <summary>
+        /// Elimina los tokens expirados de la lista negra (blacklist).
+        /// </summary>
+        /// <returns>El número de tokens expirados eliminados</returns>
         public async Task<int> DeleteExpiredTokensInBlacklistAsync()
         {
             int deletedCount = await _tokenRepository.DeleteExpiredTokensAsync();

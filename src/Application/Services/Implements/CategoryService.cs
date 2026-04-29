@@ -7,14 +7,31 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de categorías.
+    /// </summary>
     public class CategoryService : ICategoryService
     {
+        /// <summary>
+        /// Repositorio de categorías.
+        /// </summary>
         private readonly ICategoryRepository _categoryRepository;
+
+        /// <summary>
+        /// Constructor del servicio de categorías.
+        /// </summary>
+        /// <param name="categoryRepository">El repositorio de categorías.</param>
         public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
+        /// <summary>
+        /// Crea una nueva categoría.
+        /// </summary>
+        /// <param name="categoryDto">El DTO para crear la categoría.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> CreateCategoryAsync(CreateBrandCategoryDTO categoryDto)
         {
             var categoryExists = await _categoryRepository.ExistsByNameAsync(categoryDto.Name);
@@ -38,6 +55,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return $"Categoría '{category.Name}' creada exitosamente.";
         }
 
+        /// <summary>
+        /// Actualiza una categoría por su ID.
+        /// </summary>
+        /// <param name="categoryId">El ID de la categoría a actualizar.</param>
+        /// <param name="categoryDto">El DTO para actualizar la categoría.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> UpdateCategoryAsync(int categoryId, UpdateBrandCategoryDTO categoryDto)
         {
             // Verificar la categoría por su ID
@@ -116,6 +141,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
         }
 
+        /// <summary>
+        /// Elimina una categoría por su ID.
+        /// </summary>
+        /// <param name="categoryId">El ID de la categoría a eliminar.</param>
+        /// <returns>Mensaje de resultado.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> DeleteCategoryAsync(int categoryId)
         {
             // Verificar la categoría por su ID

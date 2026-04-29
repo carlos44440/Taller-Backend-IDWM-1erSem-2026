@@ -4,10 +4,22 @@ using TiendaUCN.src.Application.Services.Interfaces;
 
 namespace TiendaUCN.src.API.Middlewares
 {
+    /// <summary>
+    /// Middleware de Blacklist.
+    /// </summary>
+    /// <param name="next">El siguiente middleware en la cadena</param>
     public class BlacklistMiddleware(RequestDelegate next)
     {
+        /// <summary>
+        /// El siguiente middleware en la cadena de ejecución.
+        /// </summary>
         private readonly RequestDelegate _next = next;
 
+        /// <summary>
+        /// Invoca el middleware para verificar si el token de autenticación está en la lista negra.
+        /// </summary>
+        /// <param name="context">El contexto de la solicitud HTTP</param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             // Obtén el servicio ITokenService desde el contenedor de servicios por solicitud.

@@ -2,8 +2,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TiendaUCN.src.Application.Validators
 {
+    /// <summary>
+    /// Atributo de validación personalizado para la fecha de nacimiento.
+    /// </summary>
     public class BirthDateValidationAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// Valida la fecha de nacimiento.
+        /// </summary>
+        /// <param name="value">El valor a validar.</param>
+        /// <param name="validationContext">El contexto de validación.</param>
+        /// <returns>El resultado de la validación.</returns>
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             string valueString = value?.ToString()!;

@@ -6,17 +6,33 @@ using TiendaUCN.src.Application.Services.Interfaces;
 
 namespace TiendaUCN.src.API.Controllers
 {
+    /// <summary>
+    /// Controlador de categorías.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
     public class CategoryController : ControllerBase
     {
+        /// <summary>
+        /// Interfaz del servicio de categoría.
+        /// </summary>
         private readonly ICategoryService _categoryService;
+
+        /// <summary>
+        /// Constructor del controlador de categorías.
+        /// </summary>
+        /// <param name="categoryService">Interfaz del servicio de categoría</param>
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
+        /// <summary>
+        /// Endpoint para crear una nueva categoría.
+        /// </summary>
+        /// <param name="createCategoryDTO">DTO para la creación de categoría</param>
+        /// <returns>Mensaje de éxito</returns>
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CreateBrandCategoryDTO createCategoryDTO)
         {
@@ -24,6 +40,12 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<string>(message, null));
         }
 
+        /// <summary>
+        /// Endpoint para actualizar una categoría existente.
+        /// </summary>
+        /// <param name="id">ID de la categoría a actualizar</param>
+        /// <param name="updateCategoryDTO">DTO para la actualización de categoría</param>
+        /// <returns>Mensaje de éxito</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateBrandCategoryDTO updateCategoryDTO)
         {
@@ -31,6 +53,11 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<string>(message, null));
         }
 
+        /// <summary>
+        /// Endpoint para eliminar una categoría existente.
+        /// </summary>
+        /// <param name="id">ID de la categoría a eliminar</param>
+        /// <returns>Mensaje de éxito</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory([FromRoute] int id)
         {

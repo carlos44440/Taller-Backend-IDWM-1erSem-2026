@@ -8,11 +8,32 @@ using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
+    /// <summary>
+    /// Servicio de órdenes.
+    /// </summary>
     public class OrderService : IOrderService
     {
+        /// <summary>
+        /// Interfaz del repositorio de órdenes.
+        /// </summary>
         private readonly IOrderRepository _orderRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de carritos.
+        /// </summary>
         private readonly ICartRepository _cartRepository;
+
+        /// <summary>
+        /// Interfaz del repositorio de productos.
+        /// </summary>
         private readonly IProductRepository _productRepository;
+
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="OrderService"/>.
+        /// </summary>
+        /// <param name="orderRepository">Interfaz del repositorio de órdenes.</param>
+        /// <param name="cartRepository">Interfaz del repositorio de carritos.</param>
+        /// <param name="productRepository">Interfaz del repositorio de productos.</param>
         public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
@@ -20,6 +41,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             _productRepository = productRepository;
         }
 
+        /// <summary>
+        /// Crea una nueva orden.
+        /// </summary>
+        /// <param name="userId">Identificador del usuario.</param>
+        /// <returns>Código de la orden creada.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<string> CreateOrderAsync(int userId)
         {
             // Obtener el carrito del usuario
@@ -73,6 +101,13 @@ namespace TiendaUCN.src.Application.Services.Implements
             return code;
         }
 
+        /// <summary>
+        /// Obtiene el detalle de una orden.
+        /// </summary>
+        /// <param name="orderCode">Código de la orden.</param>
+        /// <param name="userId">Identificador del usuario.</param>
+        /// <returns>Detalle de la orden.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<OrderDetailDTO> GetOrderDetailAsync(string orderCode, int userId)
         {
             // Obtener la orden por su código
@@ -83,6 +118,14 @@ namespace TiendaUCN.src.Application.Services.Implements
             return order.Adapt<OrderDetailDTO>();
         }
 
+        /// <summary>
+        /// Obtiene las órdenes de un usuario con paginación y filtros.
+        /// </summary>
+        /// <param name="searchParams">Parámetros de búsqueda y paginación.</param>
+        /// <param name="userId">Identificador del usuario.</param>
+        /// <returns>Listado de órdenes.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public async Task<ListedOrderDetailDTO> GetOrdersByUserIdAsync(SearchParamsDTO searchParams, int userId)
         {
             // Obtener las orders filtrados y el total de orders que cumplen con el filtro
@@ -119,6 +162,10 @@ namespace TiendaUCN.src.Application.Services.Implements
             return listedOrders;
         }
 
+        /// <summary>
+        /// Genera un código único para la orden.
+        /// </summary>
+        /// <returns>Código único para la orden.</returns>
         private async Task<string> GenerateOrderCodeAsync()
         {
             string code;

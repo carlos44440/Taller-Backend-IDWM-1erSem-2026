@@ -5,8 +5,17 @@ using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Infrastructure.Data
 {
+    /// <summary>
+    /// Clase DataSeeder que se encarga de inicializar la base de datos con datos de prueba.
+    /// </summary>
     public class DataSeeder
     {
+        /// <summary>
+        /// Método estático que inicializa la base de datos con datos de prueba.
+        /// </summary>
+        /// <param name="serviceProvider">Proveedor de servicios</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             try
@@ -140,6 +149,10 @@ namespace TiendaUCN.src.Infrastructure.Data
             }
         }
 
+        /// <summary>
+        /// Genera un RUT chileno aleatorio en formato "XXXXXXXX-X".
+        /// </summary>
+        /// <returns></returns>
         private static string RandomRut()
         {
             var faker = new Faker();
@@ -148,6 +161,10 @@ namespace TiendaUCN.src.Infrastructure.Data
             return $"{number}-{verifier}";
         }
 
+        /// <summary>
+        /// Genera un número de teléfono chileno aleatorio en formato "+569 XXXX-XXXX".
+        /// </summary>
+        /// <returns></returns>
         private static string RandomPhoneNumber()
         {
             var faker = new Faker();
