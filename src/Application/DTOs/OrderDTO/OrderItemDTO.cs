@@ -23,12 +23,12 @@ namespace TiendaUCN.src.Application.DTOs.OrderDTO
         /// <summary>
         /// Precio unitario del producto al momento de la compra.
         /// </summary>
-        public required string UnitPriceAtMoment { get; set; }
+        public required int UnitPriceAtMoment { get; set; }
 
         /// <summary>
         /// Precio subtotal correspondiente a la cantidad del producto.
         /// </summary>
-        public required string SubtotalPrice { get; set; }
+        public required int SubtotalPrice { get; set; }
 
         /// <summary>
         /// Cantidad del producto en la orden.

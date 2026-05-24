@@ -8,6 +8,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
     public interface ICategoryRepository
     {
         /// <summary>
+        /// Obtiene las categorías activas ordenadas por nombre.
+        /// </summary>
+        /// <returns>Lista de categorías activas.</returns>
+        Task<List<Category>> GetActiveAsync();
+
+        /// <summary>
         /// Verifica si una categoría existe por su nombre.
         /// </summary>
         /// <param name="name">El nombre de la categoría</param>

@@ -8,6 +8,12 @@ namespace TiendaUCN.src.Application.Services.Interfaces
     public interface IBrandService
     {
         /// <summary>
+        /// Obtiene las marcas activas.
+        /// </summary>
+        /// <returns>Lista de marcas para catálogo.</returns>
+        Task<List<CatalogItemDTO>> GetActiveBrandsAsync();
+
+        /// <summary>
         /// Crea una nueva marca.
         /// </summary>
         /// <param name="brandDto">El DTO de la marca a crear.</param>

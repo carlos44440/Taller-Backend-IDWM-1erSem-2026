@@ -10,6 +10,7 @@ using Serilog;
 using System.Text;
 using Tienda_UCN_api.Src.Application.Mappers;
 using TiendaUCN.src.API.Middlewares;
+using TiendaUCN.src.Application.Abstractions;
 using TiendaUCN.src.Application.Jobs.Implements;
 using TiendaUCN.src.Application.Jobs.Interfaces;
 using TiendaUCN.src.Application.Mappers;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITransactionRunner, EfTransactionRunner>();
 
 // Configuración de trabajos en segundo plano
 builder.Services.AddScoped<IUserJob, UserJob>();

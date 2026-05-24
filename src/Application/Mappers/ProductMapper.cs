@@ -22,11 +22,6 @@ namespace TiendaUCN.src.Application.Mappers
         private readonly string? _defaultImageURL;
 
         /// <summary>
-        /// Número de unidades para considerar que el producto tiene pocas unidades disponibles.
-        /// </summary>
-        private readonly int _fewUnitsAvailable;
-
-        /// <summary>
         /// Constructor del ProductMapper
         /// </summary>
         /// <param name="configuration">Interfaz de configuración</param>
@@ -35,7 +30,6 @@ namespace TiendaUCN.src.Application.Mappers
         {
             _configuration = configuration;
             _defaultImageURL = _configuration.GetValue<string>("Products:DefaultImageUrl") ?? throw new InvalidOperationException("La URL de la imagen por defecto no puede ser nula.");
-            _fewUnitsAvailable = _configuration.GetValue<int?>("Products:FewUnitsAvailable") ?? throw new InvalidOperationException("La configuración 'FewUnitsAvailable' no puede ser nula.");
         }
 
         /// <summary>
@@ -52,8 +46,7 @@ namespace TiendaUCN.src.Application.Mappers
         private void ConfigureProductMappings()
         {
             TypeAdapterConfig<Product, ProductDetailCustomerDTO>.NewConfig()
-                .Map(dest => dest.Price, src => src.Price.ToString("C"))
-                .Map(dest => dest.StockIndicator, src => GetStockIndicator(src.Stock))
+                .Map(dest => dest.InStock, src => src.Stock > 0)
                 .Map(dest => dest.BrandName, src => src.Brand.Name)
                 .Map(dest => dest.BrandDescription, src => src.Brand.Description)
                 .Map(dest => dest.CategoryName, src => src.Category.Name)
@@ -62,7 +55,6 @@ namespace TiendaUCN.src.Application.Mappers
                     src.Images.Select(i => i.ImageUrl).ToList() : new List<string> { _defaultImageURL! });
 
             TypeAdapterConfig<Product, ProductDetailAdminDTO>.NewConfig()
-                .Map(dest => dest.Price, src => src.Price.ToString("C"))
                 .Map(dest => dest.BrandName, src => src.Brand.Name)
                 .Map(dest => dest.BrandDescription, src => src.Brand.Description)
                 .Map(dest => dest.CategoryName, src => src.Category.Name)
@@ -72,25 +64,11 @@ namespace TiendaUCN.src.Application.Mappers
 
             TypeAdapterConfig<Product, ProductForCustomerDTO>.NewConfig()
                 .Map(dest => dest.MainImageURL, src => src.Images.FirstOrDefault() != null ? src.Images.First().ImageUrl : _defaultImageURL)
-                .Map(dest => dest.Price, src => src.Price.ToString("C"))
-                .Map(dest => dest.StockIndicator, src => GetStockIndicator(src.Stock));
+                .Map(dest => dest.InStock, src => src.Stock > 0);
 
             TypeAdapterConfig<Product, ProductForAdminDTO>.NewConfig()
                 .Map(dest => dest.MainImageURL, src => src.Images.FirstOrDefault() != null ? src.Images.First().ImageUrl : _defaultImageURL)
-                .Map(dest => dest.Price, src => src.Price.ToString("C"))
                 .Map(dest => dest.Available, src => src.IsActive ? "Activo" : "Inactivo");
-        }
-
-        /// <summary>
-        /// Obtiene un indicador de stock.
-        /// </summary>
-        /// <param name="stock">La cantidad de unidades en stock</param>
-        /// <returns>El indicador de stock</returns>
-        private string GetStockIndicator(int stock)
-        {
-            if (stock == 0) { return "Producto sin stock"; }
-            if (stock <= _fewUnitsAvailable) { return "Pocas unidades disponibles"; }
-            return "Con Stock"!;
         }
     }
 }

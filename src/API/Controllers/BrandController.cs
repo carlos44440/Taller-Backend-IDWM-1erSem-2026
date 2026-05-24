@@ -28,6 +28,17 @@ namespace TiendaUCN.src.API.Controllers
             _brandService = brandService;
         }
 
+        /// <summary>
+        /// Endpoint para listar marcas activas.
+        /// </summary>
+        /// <returns>Lista de marcas</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetActiveBrands()
+        {
+            var brands = await _brandService.GetActiveBrandsAsync();
+            return Ok(new GenericResponse<List<CatalogItemDTO>>("Marcas obtenidas exitosamente", brands));
+        }
 
         /// <summary>
         /// Endpoint para crear una nueva marca.

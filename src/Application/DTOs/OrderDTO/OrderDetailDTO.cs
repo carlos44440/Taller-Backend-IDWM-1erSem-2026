@@ -18,7 +18,7 @@ namespace TiendaUCN.src.Application.DTOs.OrderDTO
         /// <summary>
         /// Precio total de la orden.
         /// </summary>
-        public required string TotalPrice { get; set; }
+        public required int TotalPrice { get; set; }
 
         /// <summary>
         /// Lista de ítems asociados a la orden.

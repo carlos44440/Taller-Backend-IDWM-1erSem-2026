@@ -28,14 +28,11 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO.Customer
         /// <summary>
         /// Precio del producto.
         /// </summary>
-        public required string Price { get; set; }
+        public required int Price { get; set; }
 
         /// <summary>
-        /// Indicador de disponibilidad de stock del producto.
+        /// Indica si el producto tiene stock disponible.
         /// </summary>
-        /// <remarks>
-        /// Representa el estado del stock en un formato entendible para el cliente.
-        /// </remarks>
-        public required string StockIndicator { get; set; }
+        public required bool InStock { get; set; }
     }
 }

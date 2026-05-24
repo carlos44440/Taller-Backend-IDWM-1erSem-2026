@@ -26,6 +26,6 @@ namespace TiendaUCN.src.Application.DTOs.CartDTO
         /// <summary>
         /// Precio total del carrito.
         /// </summary>
-        public required string TotalPrice { get; set; }
+        public required int TotalPrice { get; set; }
     }
 }

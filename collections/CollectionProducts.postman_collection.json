@@ -85,7 +85,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"message\": \"Conflicto de operación\",\n    \"details\": \"El nombre de usuario ya está registrado.\"\n}"
+              "body": "{\n    \"message\": \"Conflicto de operación\",\n    \"details\": \"El correo ya está registrado.\"\n}"
             }
           ]
         },
@@ -357,6 +357,45 @@
           "name": "Marcas",
           "item": [
             {
+              "name": "GetBrands",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}brand",
+                  "host": [
+                    "{{baseurl}}brand"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetBrands",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}brand",
+                      "host": [
+                        "{{baseurl}}brand"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Marcas obtenidas exitosamente\",\n    \"data\": [\n        { \"id\": 1, \"name\": \"Apple\" },\n        { \"id\": 2, \"name\": \"Samsung\" }\n    ]\n}"
+                }
+              ]
+            },
+            {
               "name": "CreateBrand",
               "request": {
                 "auth": {
@@ -600,6 +639,45 @@
         {
           "name": "Categorias",
           "item": [
+            {
+              "name": "GetCategories",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}category",
+                  "host": [
+                    "{{baseurl}}category"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "GetCategories",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseurl}}category",
+                      "host": [
+                        "{{baseurl}}category"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Categorías obtenidas exitosamente\",\n    \"data\": [\n        { \"id\": 1, \"name\": \"Electronica\" },\n        { \"id\": 2, \"name\": \"Ropa\" }\n    ]\n}"
+                }
+              ]
+            },
             {
               "name": "CreateCategory",
               "request": {
@@ -1145,7 +1223,7 @@
                     }
                   ],
                   "cookie": [],
-                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 55,\n        \"name\": \"Readmi Note\",\n        \"description\": \"Telefono celular proveniente de china\",\n        \"price\": \"$900.000\",\n        \"stock\": 50,\n        \"brandName\": \"samsung\",\n        \"brandDescription\": \"1111a\",\n        \"categoryName\": \"Electronica\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005980/product/55/images/GorroNegro_pxckiu.png\"\n        ],\n        \"isActive\": false,\n        \"createdAt\": \"2026-03-30T02:00:59.9531486\"\n    }\n}"
+                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 55,\n        \"name\": \"Readmi Note\",\n        \"description\": \"Telefono celular proveniente de china\",\n        \"price\": 900000,\n        \"stock\": 50,\n        \"brandName\": \"samsung\",\n        \"brandDescription\": \"1111a\",\n        \"categoryName\": \"Electronica\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg\",\n            \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005980/product/55/images/GorroNegro_pxckiu.png\"\n        ],\n        \"isActive\": false,\n        \"createdAt\": \"2026-03-30T02:00:59.9531486\"\n    }\n}"
                 }
               ]
             },
@@ -1202,7 +1280,7 @@
                     }
                   ],
                   "cookie": [],
-                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 40,\n        \"name\": \"Generic Steel Fish\",\n        \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n        \"price\": \"$5.881\",\n        \"stockIndicator\": \"Con Stock\",\n        \"brandName\": \"Apple\",\n        \"brandDescription\": null,\n        \"categoryName\": \"Ropa\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://picsum.photos/640/480/?image=591\",\n            \"https://picsum.photos/640/480/?image=802\"\n        ]\n    }\n}"
+                  "body": "{\n    \"message\": \"Producto encontrado exitosamente\",\n    \"data\": {\n        \"id\": 40,\n        \"name\": \"Generic Steel Fish\",\n        \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n        \"price\": 5881,\n        \"inStock\": true,\n        \"brandName\": \"Apple\",\n        \"brandDescription\": null,\n        \"categoryName\": \"Ropa\",\n        \"categoryDescription\": null,\n        \"imagesURL\": [\n            \"https://picsum.photos/640/480/?image=591\",\n            \"https://picsum.photos/640/480/?image=802\"\n        ]\n    }\n}"
                 }
               ]
             },
@@ -1359,7 +1437,7 @@
                     }
                   ],
                   "cookie": [],
-                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 50,\n                \"name\": \"Generic Cotton Towels\",\n                \"description\": \"Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=679\",\n                \"price\": \"$76.316\",\n                \"stockIndicator\": \"Con Stock\"\n            },\n            {\n                \"id\": 40,\n                \"name\": \"Generic Steel Fish\",\n                \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=591\",\n                \"price\": \"$5.881\",\n                \"stockIndicator\": \"Con Stock\"\n            }\n        ],\n        \"totalCount\": 4,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
+                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 50,\n                \"name\": \"Generic Cotton Towels\",\n                \"description\": \"Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active muscles\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=679\",\n                \"price\": 76316,\n                \"inStock\": true\n            },\n            {\n                \"id\": 40,\n                \"name\": \"Generic Steel Fish\",\n                \"description\": \"Carbonite web goalkeeper gloves are ergonomically designed to give easy fit\",\n                \"mainImageURL\": \"https://picsum.photos/640/480/?image=591\",\n                \"price\": 5881,\n                \"inStock\": true\n            }\n        ],\n        \"totalCount\": 4,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
                 }
               ]
             },
@@ -1457,7 +1535,7 @@
                     }
                   ],
                   "cookie": [],
-                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 55,\n                \"name\": \"Readmi Note\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n                \"price\": \"$900.000\",\n                \"stock\": 50,\n                \"available\": \"Inactivo\"\n            },\n            {\n                \"id\": 54,\n                \"name\": \"Readmi Note 10\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1774820187/product/54/images/gorra_rm7tbp.jpg\",\n                \"price\": \"$900.000\",\n                \"stock\": 50,\n                \"available\": \"Activo\"\n            }\n        ],\n        \"totalCount\": 3,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
+                  "body": "{\n    \"message\": \"Productos encontrados exitosamente\",\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 55,\n                \"name\": \"Readmi Note\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005910/product/55/images/Carlos_Avatar_ypbjiz.jpg\",\n                \"price\": 900000,\n                \"stock\": 50,\n                \"available\": \"Inactivo\"\n            },\n            {\n                \"id\": 54,\n                \"name\": \"Readmi Note 10\",\n                \"mainImageURL\": \"https://res.cloudinary.com/dvyjchrf8/image/upload/v1774820187/product/54/images/gorra_rm7tbp.jpg\",\n                \"price\": 900000,\n                \"stock\": 50,\n                \"available\": \"Activo\"\n            }\n        ],\n        \"totalCount\": 3,\n        \"totalPages\": 2,\n        \"currentPage\": 1,\n        \"pageSize\": 2,\n        \"productsInPage\": 2\n    }\n}"
                 }
               ]
             },
