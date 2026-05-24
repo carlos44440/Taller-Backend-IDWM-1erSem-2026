@@ -27,6 +27,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? throw new InvalidOperationException("Cors:AllowedOrigins no está configurado.");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 // Configuración de mapeadores
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<ProductMapper>();
@@ -175,6 +189,7 @@ Log.Information($"Job recurrente '{jobId}' configurado con cron: {cronExpression
 #endregion
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseCors("Frontend");
 app.UseMiddleware<CartMiddleware>();    // 1. Maneja la cookie de carrito de compras para usuarios anónimos
 app.UseAuthentication();         // 2. Valida el JWT
 app.UseMiddleware<BlacklistMiddleware>(); // 3. Verifica blacklist
