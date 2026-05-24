@@ -45,7 +45,6 @@ namespace TiendaUCN.src.Application.Mappers
         private void ConfigureCartMappings()
         {
             TypeAdapterConfig<Cart, CartDTO>.NewConfig()
-                .Map(dest => dest.TotalPrice, src => src.TotalPrice.ToString("C"))
                 .Map(dest => dest.Items, src => src.CartItems.Select(i => i.Adapt<CartItemDTO>()).ToList());
         }
 
@@ -57,8 +56,8 @@ namespace TiendaUCN.src.Application.Mappers
             TypeAdapterConfig<CartItem, CartItemDTO>.NewConfig()
                 .Map(dest => dest.ProductName, src => src.Product.Name)
                 .Map(dest => dest.ProductImageUrl, src => src.Product.Images.FirstOrDefault() != null ? src.Product.Images.First().ImageUrl : _defaultImageURL)
-                .Map(dest => dest.ProductPrice, src => src.Product.Price.ToString("C"))
-                .Map(dest => dest.TotalPrice, src => (src.Quantity * src.Product.Price).ToString("C"));
+                .Map(dest => dest.ProductPrice, src => src.Product.Price)
+                .Map(dest => dest.TotalPrice, src => src.Quantity * src.Product.Price);
         }
     }
 }

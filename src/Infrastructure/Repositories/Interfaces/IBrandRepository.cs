@@ -8,6 +8,12 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
     public interface IBrandRepository
     {
         /// <summary>
+        /// Obtiene las marcas activas ordenadas por nombre.
+        /// </summary>
+        /// <returns>Lista de marcas activas.</returns>
+        Task<List<Brand>> GetActiveAsync();
+
+        /// <summary>
         /// Verifica si una marca existe por su nombre.
         /// </summary>
         /// <param name="name">Nombre de la marca</param>

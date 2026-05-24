@@ -35,19 +35,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         }
 
         /// <summary>
-        /// Verifica si un usuario existe por su nombre.
-        /// </summary>
-        /// <param name="name">El nombre del usuario</param>
-        /// <returns>true si el usuario existe, false si no</returns>
-        public async Task<bool> ExistsByNameAsync(string name)
-        {
-            return await _context.Users
-                .AnyAsync(u =>
-                    u.Name == name &&
-                    u.IsDeleted == false);
-        }
-
-        /// <summary>
         /// Verifica si un usuario existe por su correo electrónico.
         /// </summary>
         /// <param name="email">El correo electrónico del usuario</param>
@@ -71,19 +58,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .AnyAsync(u =>
                     u.Rut == rut &&
                     u.IsDeleted == false);
-        }
-
-        /// <summary>
-        /// Verifica si un usuario existe por su número de teléfono.
-        /// </summary>
-        /// <param name="phoneNumber">El número de teléfono del usuario</param>
-        /// <returns>true si el usuario existe, false si no</returns>
-        public async Task<bool> ExistsByPhoneNumberAsync(string phoneNumber)
-        {
-            return await _context.Users
-                .AnyAsync(u =>
-                    u.PhoneNumber == phoneNumber
-                    && u.IsDeleted == false);
         }
 
         /// <summary>

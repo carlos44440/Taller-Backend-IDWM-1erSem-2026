@@ -14,13 +14,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         Task CreateAsync(User user);
 
         /// <summary>
-        /// Verifica si un usuario existe por su nombre.
-        /// </summary>
-        /// <param name="name">El nombre del usuario</param>
-        /// <returns>true si el usuario existe, false si no</returns>
-        Task<bool> ExistsByNameAsync(string name);
-
-        /// <summary>
         /// Verifica si un usuario existe por su correo electrónico.
         /// </summary>
         /// <param name="email">El correo electrónico del usuario</param>
@@ -33,13 +26,6 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
         /// <param name="rut">El RUT del usuario</param>
         /// <returns>true si el usuario existe, false si no</returns>
         Task<bool> ExistsByRutAsync(string rut);
-
-        /// <summary>
-        /// Verifica si un usuario existe por su número de teléfono.
-        /// </summary>
-        /// <param name="phoneNumber">El número de teléfono del usuario</param>
-        /// <returns>true si el usuario existe, false si no</returns>
-        Task<bool> ExistsByPhoneNumberAsync(string phoneNumber);
 
         /// <summary>
         /// Obtiene un usuario por su correo electrónico.

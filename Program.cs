@@ -10,6 +10,7 @@ using Serilog;
 using System.Text;
 using Tienda_UCN_api.Src.Application.Mappers;
 using TiendaUCN.src.API.Middlewares;
+using TiendaUCN.src.Application.Abstractions;
 using TiendaUCN.src.Application.Jobs.Implements;
 using TiendaUCN.src.Application.Jobs.Interfaces;
 using TiendaUCN.src.Application.Mappers;
@@ -25,6 +26,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? throw new InvalidOperationException("Cors:AllowedOrigins no está configurado.");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // Configuración de mapeadores
 builder.Services.AddScoped<UserMapper>();
@@ -51,6 +66,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITransactionRunner, EfTransactionRunner>();
 
 // Configuración de trabajos en segundo plano
 builder.Services.AddScoped<IUserJob, UserJob>();
@@ -173,6 +189,7 @@ Log.Information($"Job recurrente '{jobId}' configurado con cron: {cronExpression
 #endregion
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseCors("Frontend");
 app.UseMiddleware<CartMiddleware>();    // 1. Maneja la cookie de carrito de compras para usuarios anónimos
 app.UseAuthentication();         // 2. Valida el JWT
 app.UseMiddleware<BlacklistMiddleware>(); // 3. Verifica blacklist

@@ -1,5 +1,6 @@
 using Mapster;
 using Serilog;
+using TiendaUCN.src.Application.Abstractions;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
@@ -38,6 +39,11 @@ namespace TiendaUCN.src.Application.Services.Implements
         private readonly ITokenService _tokenService;
 
         /// <summary>
+        /// Ejecutor de transacciones de base de datos.
+        /// </summary>
+        private readonly ITransactionRunner _transactionRunner;
+
+        /// <summary>
         /// Tiempo de expiración del código de verificación.
         /// </summary>
         private readonly int _verificationCodeExpiry;
@@ -65,13 +71,21 @@ namespace TiendaUCN.src.Application.Services.Implements
         /// <param name="verificationCodeRepository">Interfaz del repositorio de códigos de verificación.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
         /// <param name="tokenService">Servicio de generación de tokens.</param>
-        public UserService(IEmailService emailService, IUserRepository userRepository, IVerificationCodeRepository verificationCodeRepository, IConfiguration configuration, ITokenService tokenService)
+        /// <param name="transactionRunner">Ejecutor de transacciones de base de datos.</param>
+        public UserService(
+            IEmailService emailService,
+            IUserRepository userRepository,
+            IVerificationCodeRepository verificationCodeRepository,
+            IConfiguration configuration,
+            ITokenService tokenService,
+            ITransactionRunner transactionRunner)
         {
             _emailService = emailService;
             _userRepository = userRepository;
             _verificationCodeRepository = verificationCodeRepository;
             _configuration = configuration;
             _tokenService = tokenService;
+            _transactionRunner = transactionRunner;
             _verificationCodeExpiry = _configuration.GetValue<int>("VerificationCode:ExpirationTimeInMinutes");
             _maxFailedEmailVerificationAttempts = _configuration.GetValue<int>("VerificationCode:MaxFailedAttempts");
             _waitingTimeInMinutesAfterResendEmail = _configuration.GetValue<int>("VerificationCode:WaitingTimeInMinutesAfterResendEmail");
@@ -86,14 +100,6 @@ namespace TiendaUCN.src.Application.Services.Implements
         /// <exception cref="InvalidOperationException"></exception>
         public async Task<string> RegisterAsync(RegisterDTO registerDTO)
         {
-            // Validar si el usuario ya existe por nombre
-            bool isRegisteredByName = await _userRepository.ExistsByNameAsync(registerDTO.Name);
-            if (isRegisteredByName)
-            {
-                Log.Warning($"El usuario con el nombre {registerDTO.Name} ya está registrado.");
-                throw new InvalidOperationException("El nombre de usuario ya está registrado.");
-            }
-
             // Validar si el usuario ya existe por correo
             bool isRegisteredByEmail = await _userRepository.ExistsByEmailAsync(registerDTO.Email);
             if (isRegisteredByEmail)
@@ -110,41 +116,36 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new InvalidOperationException("El RUT ya está registrado.");
             }
 
-            // Validar si el usuario ya existe por numero de teléfono
-            bool isRegisteredByPhoneNumber = await _userRepository.ExistsByPhoneNumberAsync(registerDTO.PhoneNumber);
-            if (isRegisteredByPhoneNumber)
-            {
-                Log.Warning($"El usuario con el numero de teléfono {registerDTO.PhoneNumber} ya está registrado.");
-                throw new InvalidOperationException("El numero de teléfono ya está registrado.");
-            }
-
             // Crear el usuario
             var user = registerDTO.Adapt<User>();
-            await _userRepository.CreateAsync(user);
-
-            Log.Information($"Registro exitoso para el usuario: {user.Email} con Id: {user.Id}");
 
             // Generar código de verificación y su fecha de expiración
             var (verificationCode, verificationCodeExpiry) = await GenerateCodeAndExpiryAsync();
 
-            // Crear la entidad de VerificationCode
-            var verificationCodeEntity = new VerificationCode
+            await _transactionRunner.ExecuteAsync(async () =>
             {
-                Code = verificationCode,
-                Expiry = verificationCodeExpiry,
-                UserId = user.Id
-            };
+                await _userRepository.CreateAsync(user);
 
-            // Guardar el código de verificación en la base de datos
-            var createdVerificationCode = await _verificationCodeRepository.CreateAsync(verificationCodeEntity);
-            Log.Information($"Código de verificación generado para el usuario: {user.Email} - Código: {createdVerificationCode.Code}");
+                // Crear la entidad de VerificationCode
+                var verificationCodeEntity = new VerificationCode
+                {
+                    Code = verificationCode,
+                    Expiry = verificationCodeExpiry,
+                    UserId = user.Id
+                };
 
-            await _emailService.SendVerificationCodeEmailAsync(user.Email, createdVerificationCode.Code);
+                // Guardar el código de verificación en la base de datos
+                var createdVerificationCode = await _verificationCodeRepository.CreateAsync(verificationCodeEntity);
+                Log.Information($"Código de verificación generado para el usuario: {user.Email} - Código: {createdVerificationCode.Code}");
+
+                await _emailService.SendVerificationCodeEmailAsync(user.Email, createdVerificationCode.Code);
+            });
+
+            Log.Information($"Registro exitoso para el usuario: {user.Email} con Id: {user.Id}");
             Log.Information($"Se ha enviado un código de verificación al correo electrónico: {user.Email}");
 
             // Retornar mensaje de éxito
             return $"Se ha enviado un código de verificación a su correo electrónico, este código expirará en {_verificationCodeExpiry} minutos, debe verificar su cuenta antes de que pasen {_daysToDeleteUnverifiedAccount} días o será eliminada.";
-
         }
 
         /// <summary>
@@ -205,29 +206,37 @@ namespace TiendaUCN.src.Application.Services.Implements
 
                 // Generar y enviar un nuevo código de verificación
                 var (verificationCode, verificationCodeExpiry) = await GenerateCodeAndExpiryAsync();
-                var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
-                if (!isUpdated)
-                {
-                    Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
-                    throw new InvalidOperationException("Error al actualizar el código de verificación.");
-                }
 
-                await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+                await _transactionRunner.ExecuteAsync(async () =>
+                {
+                    var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
+                    if (!isUpdated)
+                    {
+                        Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
+                        throw new InvalidOperationException("Error al actualizar el código de verificación.");
+                    }
+
+                    await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+                });
+
                 Log.Information($"Se ha enviado un código de verificación al correo electrónico: {user.Email}");
 
                 throw new InvalidOperationException("El código de verificación ha expirado, se ha enviado un nuevo código a su correo electrónico.");
             }
 
-            // Marcar el correo electrónico como verificado
-            bool isVerified = await _userRepository.MarkEmailAsVerifiedAsync(user.Id);
-            if (!isVerified)
+            await _transactionRunner.ExecuteAsync(async () =>
             {
-                Log.Error($"Error al marcar el correo electrónico como verificado para el usuario {user.Email}");
-                throw new InvalidOperationException("Error al verificar el correo electrónico.");
-            }
+                // Marcar el correo electrónico como verificado
+                bool isVerified = await _userRepository.MarkEmailAsVerifiedAsync(user.Id);
+                if (!isVerified)
+                {
+                    Log.Error($"Error al marcar el correo electrónico como verificado para el usuario {user.Email}");
+                    throw new InvalidOperationException("Error al verificar el correo electrónico.");
+                }
 
-            // Enviar correo de bienvenida
-            await _emailService.SendWelcomeEmailAsync(user.Email);
+                // Enviar correo de bienvenida
+                await _emailService.SendWelcomeEmailAsync(user.Email);
+            });
 
             Log.Information($"Correo electrónico verificado exitosamente para el usuario {user.Email}");
         }
@@ -343,22 +352,26 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             // Generar y enviar un nuevo código de verificación
             var (verificationCode, verificationCodeExpiry) = await GenerateCodeAndExpiryAsync();
-            var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
-            if (!isUpdated)
-            {
-                Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
-                throw new InvalidOperationException("Error al actualizar el código de verificación.");
-            }
-
             var newDateToResend = DateTime.UtcNow.AddMinutes(_waitingTimeInMinutesAfterResendEmail);
-            var isDateToResendUpdated = await _verificationCodeRepository.UpdateDateToResendAsync(user.VerificationCode.Id, newDateToResend);
-            if (!isDateToResendUpdated)
-            {
-                Log.Error($"Error al actualizar la fecha para reenviar un nuevo código de verificación para el usuario {user.Email}");
-                throw new InvalidOperationException("Error al actualizar la fecha para reenviar un nuevo código de verificación.");
-            }
 
-            await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+            await _transactionRunner.ExecuteAsync(async () =>
+            {
+                var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
+                if (!isUpdated)
+                {
+                    Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
+                    throw new InvalidOperationException("Error al actualizar el código de verificación.");
+                }
+
+                var isDateToResendUpdated = await _verificationCodeRepository.UpdateDateToResendAsync(user.VerificationCode.Id, newDateToResend);
+                if (!isDateToResendUpdated)
+                {
+                    Log.Error($"Error al actualizar la fecha para reenviar un nuevo código de verificación para el usuario {user.Email}");
+                    throw new InvalidOperationException("Error al actualizar la fecha para reenviar un nuevo código de verificación.");
+                }
+
+                await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+            });
 
             return $"El código expirará en {_verificationCodeExpiry} minutos. Puedes solicitar un nuevo código después de {_waitingTimeInMinutesAfterResendEmail} minutos.";
         }

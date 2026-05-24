@@ -23,7 +23,7 @@ namespace TiendaUCN.src.Application.DTOs.CartDTO
         /// <summary>
         /// Precio unitario del producto.
         /// </summary>
-        public required string ProductPrice { get; set; }
+        public required int ProductPrice { get; set; }
 
         /// <summary>
         /// Cantidad del producto en el carrito.
@@ -33,6 +33,6 @@ namespace TiendaUCN.src.Application.DTOs.CartDTO
         /// <summary>
         /// Precio total correspondiente a la cantidad del producto.
         /// </summary>
-        public required string TotalPrice { get; set; }
+        public required int TotalPrice { get; set; }
     }
 }

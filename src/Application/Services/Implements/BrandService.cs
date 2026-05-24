@@ -27,6 +27,17 @@ namespace TiendaUCN.src.Application.Services.Implements
         }
 
         /// <summary>
+        /// Obtiene las marcas activas.
+        /// </summary>
+        /// <returns>Lista de marcas para catálogo.</returns>
+        public async Task<List<CatalogItemDTO>> GetActiveBrandsAsync()
+        {
+            var brands = await _brandRepository.GetActiveAsync();
+            Log.Information("Marcas activas obtenidas exitosamente. Cantidad: {Count}", brands.Count);
+            return brands.Adapt<List<CatalogItemDTO>>();
+        }
+
+        /// <summary>
         /// Crea una nueva marca.
         /// </summary>
         /// <param name="brandDto">El DTO de la marca a crear.</param>

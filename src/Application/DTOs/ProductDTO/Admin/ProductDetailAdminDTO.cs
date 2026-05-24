@@ -26,7 +26,7 @@ namespace TiendaUCN.src.Application.DTOs.ProductDTO
         /// <summary>
         /// Precio del producto.
         /// </summary>
-        public required string Price { get; set; }
+        public required int Price { get; set; }
 
         /// <summary>
         /// Stock disponible del producto.

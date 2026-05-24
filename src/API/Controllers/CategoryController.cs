@@ -29,6 +29,18 @@ namespace TiendaUCN.src.API.Controllers
         }
 
         /// <summary>
+        /// Endpoint para listar categorías activas.
+        /// </summary>
+        /// <returns>Lista de categorías</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetActiveCategories()
+        {
+            var categories = await _categoryService.GetActiveCategoriesAsync();
+            return Ok(new GenericResponse<List<CatalogItemDTO>>("Categorías obtenidas exitosamente", categories));
+        }
+
+        /// <summary>
         /// Endpoint para crear una nueva categoría.
         /// </summary>
         /// <param name="createCategoryDTO">DTO para la creación de categoría</param>

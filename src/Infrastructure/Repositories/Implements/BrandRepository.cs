@@ -25,6 +25,18 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         }
 
         /// <summary>
+        /// Obtiene las marcas activas ordenadas por nombre.
+        /// </summary>
+        /// <returns>Lista de marcas activas.</returns>
+        public async Task<List<Brand>> GetActiveAsync()
+        {
+            return await _context.Brands
+                .Where(b => !b.IsDeleted)
+                .OrderBy(b => b.Name)
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Verifica si existe una marca por su nombre.
         /// </summary>
         /// <param name="name">El nombre de la marca</param>

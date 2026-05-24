@@ -25,6 +25,18 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
         }
 
         /// <summary>
+        /// Obtiene las categorías activas ordenadas por nombre.
+        /// </summary>
+        /// <returns>Lista de categorías activas.</returns>
+        public async Task<List<Category>> GetActiveAsync()
+        {
+            return await _context.Categories
+                .Where(c => !c.IsDeleted)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Verifica si una categoría existe por su nombre.
         /// </summary>
         /// <param name="name">Nombre de la categoría</param>

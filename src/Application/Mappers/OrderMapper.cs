@@ -57,7 +57,6 @@ namespace TiendaUCN.src.Application.Mappers
 
             TypeAdapterConfig<Order, OrderDetailDTO>.NewConfig()
                 .Map(dest => dest.TransactionDate, src => TimeZoneInfo.ConvertTimeFromUtc(src.TransactionDate, _timeZoneInfo))
-                .Map(dest => dest.TotalPrice, src => src.TotalPrice.ToString("C"))
                 .Map(dest => dest.Items, src => src.OrderItems.Select(i => i.Adapt<OrderItemDTO>()).ToList());
         }
 
@@ -77,9 +76,7 @@ namespace TiendaUCN.src.Application.Mappers
             TypeAdapterConfig<OrderItem, OrderItemDTO>.NewConfig()
                 .Map(dest => dest.ProductName, src => src.NameAtMoment)
                 .Map(dest => dest.ProductDescription, src => src.DescriptionAtMoment)
-                .Map(dest => dest.MainImageURL, src => src.ImageUrlAtMoment)
-                .Map(dest => dest.UnitPriceAtMoment, src => src.UnitPriceAtMoment.ToString("C"))
-                .Map(dest => dest.SubtotalPrice, src => src.SubtotalPrice.ToString("C"));
+                .Map(dest => dest.MainImageURL, src => src.ImageUrlAtMoment);
         }
     }
 }

@@ -27,6 +27,17 @@ namespace TiendaUCN.src.Application.Services.Implements
         }
 
         /// <summary>
+        /// Obtiene las categorías activas.
+        /// </summary>
+        /// <returns>Lista de categorías para catálogo.</returns>
+        public async Task<List<CatalogItemDTO>> GetActiveCategoriesAsync()
+        {
+            var categories = await _categoryRepository.GetActiveAsync();
+            Log.Information("Categorías activas obtenidas exitosamente. Cantidad: {Count}", categories.Count);
+            return categories.Adapt<List<CatalogItemDTO>>();
+        }
+
+        /// <summary>
         /// Crea una nueva categoría.
         /// </summary>
         /// <param name="categoryDto">El DTO para crear la categoría.</param>

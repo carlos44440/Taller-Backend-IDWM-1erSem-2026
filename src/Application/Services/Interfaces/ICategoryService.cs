@@ -9,6 +9,12 @@ namespace TiendaUCN.src.Application.Services.Interfaces
     public interface ICategoryService
     {
         /// <summary>
+        /// Obtiene las categorías activas.
+        /// </summary>
+        /// <returns>Lista de categorías para catálogo.</returns>
+        Task<List<CatalogItemDTO>> GetActiveCategoriesAsync();
+
+        /// <summary>
         /// Crea una nueva categoría.
         /// </summary>
         /// <param name="createCategoryDTO">El DTO para crear la categoría.</param>
